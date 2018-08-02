@@ -9,12 +9,12 @@ namespace Itm.Database.EntityLayer
 		{
 		}
 
-		public User (int? userID)
+		public User (int userID)
 		{
-			UserID = userID;
+			ID = userID;
 		}
 
-		public int? UserID { get; set; }
+		public int ID { get; set; }
 
 		public string FirstName { get; set; }
 

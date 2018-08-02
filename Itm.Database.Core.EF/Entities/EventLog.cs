@@ -9,7 +9,7 @@ namespace Itm.Database.Core.EF.Entities
 		{
 		}
 
-		public Guid EventLogID { get; set; }
+		public int ID { get; set; }
 
 		public int EventType { get; set; }
 

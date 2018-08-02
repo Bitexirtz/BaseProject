@@ -60,7 +60,7 @@
     <Compile Include="BusinessLayer\Services\UserService.cs" />
     <Compile Include="DataLayer\Configurations\UserConfiguration.cs" />
     <Compile Include="DataLayer\Contracts\IUserRepository.cs" />
-    <Compile Include="DataLayer\DatabaseContext.cs" />
+    <Compile Include="DataLayer\AppDbContext.cs" />
     <Compile Include="DataLayer\Repositories\UserRepository.cs" />
     <Compile Include="EntityLayer\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

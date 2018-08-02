@@ -9,7 +9,7 @@ namespace Itm.Database.Core.EF.Entities
 		{
 		}
 
-		public Guid ChangeLogExclusionID { get; set; }
+		public int ID { get; set; }
 
 		public string EntityName { get; set; }
 

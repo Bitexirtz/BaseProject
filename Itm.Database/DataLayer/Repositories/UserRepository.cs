@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Itm.Database.Core.Contracts;
 using Itm.Database.Core.EF.Repositories;
@@ -13,14 +10,14 @@ namespace Itm.Database.DataLayer.Repositories
 {
 	public class UserRepository : Repository, IUserRepository
 	{
-		public UserRepository (IUserInfo userInfo, DatabaseContext dbContext)
+		public UserRepository (IUserInfo userInfo, AppDbContext dbContext)
             : base(userInfo, dbContext)
         {
 		}
 
 		#region "Read Method"
 		public async Task<User> GetAsync (User entity)
-				=> await DbContext.Set<User> ().FirstOrDefaultAsync (item => item.UserID == entity.UserID);
+				=> await DbContext.Set<User> ().FirstOrDefaultAsync (item => item.ID == entity.ID);
 
 		public IQueryable<User> GetAll (int pageSize = 10, int pageNumber = 1)
 				=> DbContext.Paging<User> (pageSize, pageNumber);

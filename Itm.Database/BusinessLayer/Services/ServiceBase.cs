@@ -12,11 +12,11 @@ namespace Itm.Database.BusinessLayer.Services
 		protected ILogger Logger;
 		protected IUserInfo UserInfo;
 		protected bool Disposed;
-		protected readonly DatabaseContext DbContext;
+		protected readonly AppDbContext DbContext;
 
 		protected IUserRepository m_userRepository;
 
-		public ServiceBase (ILogger logger, IUserInfo userInfo, DatabaseContext dbContext)
+		public ServiceBase (ILogger logger, IUserInfo userInfo, AppDbContext dbContext)
 		{
 			Logger = logger;
 			UserInfo = userInfo;
@@ -32,7 +32,7 @@ namespace Itm.Database.BusinessLayer.Services
 			}
 		}
 
-		protected string CreateLogInformation (string methodName)
+		protected string CreateInvokedMethodLog (string methodName)
 		{
 			return string.Format("{0} has been invoked", methodName);
 		}

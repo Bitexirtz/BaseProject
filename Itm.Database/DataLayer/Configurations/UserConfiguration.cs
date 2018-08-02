@@ -7,7 +7,7 @@ namespace Itm.Database.DataLayer.Configurations
 	{
 		public UserConfiguration ()
 		{
-			HasKey (db => db.UserID);
+			HasKey (db => db.ID);
 		}
 	}
 }

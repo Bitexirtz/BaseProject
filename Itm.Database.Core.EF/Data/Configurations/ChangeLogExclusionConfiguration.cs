@@ -8,7 +8,7 @@ namespace Itm.Database.Core.EF.Data.Configurations
 	{
 		public ChangeLogExclusionConfiguration ()
 		{
-			HasKey (db => db.ChangeLogExclusionID);
+			HasKey (db => db.ID);
 
 			Property (p => p.RowID).HasDatabaseGeneratedOption (DatabaseGeneratedOption.Identity);
 		}

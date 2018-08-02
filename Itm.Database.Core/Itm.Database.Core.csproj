@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Services\IDatabaseConnection.cs" />
     <Compile Include="Contracts\IUserInfo.cs" />
     <Compile Include="DatabaseException.cs" />
     <Compile Include="Responses\ResponseExtensions.cs" />

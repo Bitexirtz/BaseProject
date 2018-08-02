@@ -7,27 +7,34 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Itm.Database.Core.EF.Entities;
+using Itm.Database.Core.Services;
+using Itm.Database.EntityLayer;
 
 namespace Itm.Database.DataLayer
 {
-	public class DatabaseContext : DbContext
+	public class AppDbContext : DbContext
 	{
-		public DatabaseContext (string connectionString)
-			: base (connectionString)
+		public AppDbContext (IDatabaseConnection connection)
+			: base (connection.NameOrConnectionString)
 		{
 			Configuration.LazyLoadingEnabled = false;
 
-			System.Data.Entity.Database.SetInitializer<DatabaseContext> (new CreateDatabaseIfNotExists<DatabaseContext> ());
-			//Database.SetInitializer<WriteDbContext> (new DropCreateDatabaseAlways<WriteDbContext> ());
-			//Database.SetInitializer<DatabaseContext> (new CreateDatabaseIfNotExists<DatabaseContext> ());
+			System.Data.Entity.Database.SetInitializer<AppDbContext> (new CreateDatabaseIfNotExists<AppDbContext> ());
 		}
 
-		public DatabaseContext () : base (@"Server=192.168.19.218;initial catalog=Iwsp.TCS_DB;Integrated Security=False;user id=sa;password=sata;MultipleActiveResultSets=True;")
+		public DbSet<User> Users { get; set; }
+		public DbSet<ChangeLogExclusion> ChangeLogExclusions { get; set; }
+		public DbSet<ChangeLog> ChangeLogs { get; set; }
+		public DbSet<EventLog> EventLogs { get; set; }
+		
+
+		public AppDbContext () : base (@"Server=192.168.19.218;initial catalog=Iwsp.TCS_DB;Integrated Security=False;user id=sa;password=sata;MultipleActiveResultSets=True;")
 		{
 			Configuration.LazyLoadingEnabled = false;
 
 			//Database.SetInitializer<WriteDbContext> (new DropCreateDatabaseAlways<WriteDbContext> ());
-			System.Data.Entity.Database.SetInitializer<DatabaseContext> (new CreateDatabaseIfNotExists<DatabaseContext> ());
+			System.Data.Entity.Database.SetInitializer<AppDbContext> (new CreateDatabaseIfNotExists<AppDbContext> ());
 		}
 
 		protected override void OnModelCreating (DbModelBuilder modelBuilder)

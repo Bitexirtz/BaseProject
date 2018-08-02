@@ -8,7 +8,7 @@ namespace Itm.Database.Core.Contracts
 {
 	public interface IUserInfo
 	{
-		Guid ID { get; set; }
+		int ID { get; set; }
 		string Name { get; set; }
 	}
 }
