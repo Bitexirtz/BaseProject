@@ -9,7 +9,7 @@ namespace Itm.Database.DataLayer.Contracts
 	{
 		IQueryable<User> GetAll (int pageSize = 10, int pageNumber = 1);
 
-		Task<User> GetAsync (User entity);
+		Task<User> GetByIDAsync (int userID);
 
 		Task<int> AddAsync (User entity);
 

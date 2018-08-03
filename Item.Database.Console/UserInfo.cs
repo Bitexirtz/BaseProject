@@ -12,7 +12,7 @@ namespace Itm.Database.Console
 		public UserInfo ()
 		{
 			ID = 0;
-			Name = "Mark";
+			Name = "Login-User";
 		}
 
 		public int ID { get; set; }

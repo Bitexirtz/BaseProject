@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Itm.Database.Core.Contracts;
@@ -16,8 +17,9 @@ namespace Itm.Database.DataLayer.Repositories
 		}
 
 		#region "Read Method"
-		public async Task<User> GetAsync (User entity)
-				=> await DbContext.Set<User> ().FirstOrDefaultAsync (item => item.ID == entity.ID);
+
+		public async Task<User> GetByIDAsync (int userID)
+				=> await DbContext.Set<User> ().FirstOrDefaultAsync (item => item.ID == userID);
 
 		public IQueryable<User> GetAll (int pageSize = 10, int pageNumber = 1)
 				=> DbContext.Paging<User> (pageSize, pageNumber);

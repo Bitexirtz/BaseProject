@@ -9,10 +9,10 @@ namespace Itm.Database.BusinessLayer.Contracts
 	{
 		Task<IListResponse<User>> GetUsersAsync (int pageSize = 0, int pageNumber = 0);
 
-		Task<ISingleResponse<User>> GetUserAsync (User entity);
+		Task<ISingleResponse<User>> GetUsersByIDAsync (int userID);
 
 		Task<ISingleResponse<User>> UpdateUserAsync (User updates);
 
-		Task<ISingleResponse<User>> CreateOrderAsync (User details);
+		Task<ISingleResponse<User>> AddUserAsync (User details);
 	}
 }

@@ -18,22 +18,6 @@ namespace Itm.Database.BusinessLayer.Services
 		{
 		}
 
-		public async Task<ISingleResponse<User>> GetUserAsync (User entity)
-		{
-			Logger?.LogInformation (CreateInvokedMethodLog (MethodBase.GetCurrentMethod ().ReflectedType.FullName));
-
-			var response = new SingleResponse<User> ();
-
-			try {
-				response.Model = await UserRepository.GetAsync (entity);
-			}
-			catch (Exception ex) {
-				response.SetError (ex, Logger);
-			}
-
-			return response;
-		}
-
 		public async Task<IListResponse<User>> GetUsersAsync (int pageSize = 0, int pageNumber = 0)
 		{
 			Logger?.LogInformation (CreateInvokedMethodLog (MethodBase.GetCurrentMethod ().ReflectedType.FullName));
@@ -50,7 +34,24 @@ namespace Itm.Database.BusinessLayer.Services
 			return response;
 		}
 
-		public async Task<ISingleResponse<User>> CreateOrderAsync (User details)
+		public async Task<ISingleResponse<User>> GetUsersByIDAsync (int	userID)
+		{
+			Logger?.LogInformation (CreateInvokedMethodLog (MethodBase.GetCurrentMethod ().ReflectedType.FullName));
+
+			var response = new SingleResponse<User> ();
+
+			try {
+				response.Model = await UserRepository.GetByIDAsync (userID);
+			}
+			catch (Exception ex) {
+				response.SetError (ex, Logger);
+			}
+
+			return response;
+		}
+
+
+		public async Task<ISingleResponse<User>> AddUserAsync (User details)
 		{
 			var response = new SingleResponse<User> ();
 
