@@ -24,7 +24,5 @@ namespace Itm.Database.Core.EF.Entities
 		public string UserName { get; set; }
 
 		public DateTime? ChangeDate { get; set; }
-
-		public int RowID { get; set; }
 	}
 }

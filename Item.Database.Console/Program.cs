@@ -8,6 +8,7 @@ using Itm.Database.Core.Contracts;
 using Itm.Database.Core.Services;
 using Itm.Database.DataLayer;
 using Itm.Database.EntityLayer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Unity;
 using Unity.Injection;
@@ -21,18 +22,17 @@ namespace Itm.Database.Console
 		{
 			IUnityContainer container = new UnityContainer ();
 
-			var dbConnection = ConfigurationManager.ConnectionStrings["AppDbConnection"].ConnectionString;
-			container.RegisterType<IDatabaseConnection, DefaultDatabaseConnection> (new InjectionConstructor (dbConnection));
-			container.RegisterType<IUserInfo, UserInfo> ();
+            var dbConnection = ConfigurationManager.ConnectionStrings["AppDbConnection"].ConnectionString;
+            container.RegisterType<IDatabaseConnection, DefaultDatabaseConnection>(new InjectionConstructor(dbConnection));
 
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                .UseSqlite("Data Source=AppData.db;").Options;
+
+
+            container.RegisterType<AppDbContext>(new TransientLifetimeManager(), new InjectionConstructor(options));
+            container.RegisterType<IUserInfo, UserInfo> ();
 			container.RegisterType<ILogger> (new InjectionFactory ((c) => null));
-
-			container.RegisterType<AppDbContext> (new TransientLifetimeManager ());
-			//container.RegisterType<AppDbContext> (new PerResolveLifetimeManager (), new InjectionConstructor (new ResolvedParameter<IDatabaseConnection> ("DefaultDatabaseConnection")));
-
 			container.RegisterType<IUserService, UserService> ();
-			//container.RegisterType<IUserRepository, UserRepository> ();
-			IDatabaseConnection connection = container.Resolve<IDatabaseConnection> ();
 			IUserInfo user = container.Resolve<IUserInfo> ();
 
 			MainAsync (container).Wait ();
@@ -44,8 +44,7 @@ namespace Itm.Database.Console
 
 			var newUser = new User
 			{
-				ID = 7,
-				FirstName = "New User",
+				FirstName = "User-" + DateTime.Now.ToString(),
 				BirthDate = DateTime.Now,
 				LastName = "Amena"
 			};
@@ -54,7 +53,7 @@ namespace Itm.Database.Console
 			await repo.AddUserAsync (newUser);
 			//await repo.AddAsync (newUser);
 
-			var updateUser = repo.GetUsersByIDAsync (8);
+			var updateUser = repo.GetUsersByIDAsync (1);
 			updateUser.Result.Model.FirstName = "Aki";
 
 			await repo.UpdateUserAsync (updateUser.Result.Model);

@@ -1,17 +1,18 @@
-﻿using System;
-using System.Data.Entity;
-using System.Reflection;
-using System.Threading.Tasks;
-using Itm.Database.BusinessLayer.Contracts;
+﻿using Itm.Database.BusinessLayer.Contracts;
 using Itm.Database.Core.Contracts;
+using Itm.Database.Core.EF.Extensions;
 using Itm.Database.Core.Responses;
 using Itm.Database.DataLayer;
 using Itm.Database.EntityLayer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Itm.Database.BusinessLayer.Services
 {
-	public class UserService : ServiceBase, IUserService
+    public class UserService : ServiceBase, IUserService
 	{
 		public UserService (ILogger logger, IUserInfo userInfo, AppDbContext dbContext)
 			: base (logger, userInfo, dbContext)

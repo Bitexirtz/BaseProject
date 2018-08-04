@@ -3,25 +3,25 @@ using Microsoft.Extensions.Logging;
 
 namespace Itm.Common.Helpers
 {
-		public static class LogHelper
-		{
-			//public static ILogger<T> GetLogger<T> ()
-			//{
-			//	var serviceProvider = new ServiceCollection ()
-			//		.AddLogging ()
-			//		.BuildServiceProvider ();
+    public static class LogHelper
+    {
+        public static ILogger<T> GetLogger<T>()
+        {
+            var serviceProvider = new ServiceCollection()
+                .AddLogging()
+                .BuildServiceProvider();
 
-			//	serviceProvider
-			//		.GetService<ILoggerFactory> ()
-			//		.AddConsole (LogLevel.Debug)
-			//		.AddConsole (LogLevel.Trace)
-			//		.AddConsole (LogLevel.Information)
-			//		.AddConsole (LogLevel.Warning)
-			//		.AddConsole (LogLevel.Critical)
-			//		.AddConsole (LogLevel.Error);
+            serviceProvider
+                .GetService<ILoggerFactory>()
+                .AddConsole(LogLevel.Debug)
+                .AddConsole(LogLevel.Trace)
+                .AddConsole(LogLevel.Information)
+                .AddConsole(LogLevel.Warning)
+                .AddConsole(LogLevel.Critical)
+                .AddConsole(LogLevel.Error);
 
-			//	return serviceProvider.GetService<ILoggerFactory> ().CreateLogger<T> ();
-			//}
-		}
-	}
+            return serviceProvider.GetService<ILoggerFactory>().CreateLogger<T>();
+        }
+    }
+}
 

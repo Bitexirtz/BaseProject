@@ -18,7 +18,5 @@ namespace Itm.Database.Core.EF.Entities
 		public string Message { get; set; }
 
 		public DateTime? EntryDate { get; set; }
-
-		public int RowID { get; set; }
 	}
 }

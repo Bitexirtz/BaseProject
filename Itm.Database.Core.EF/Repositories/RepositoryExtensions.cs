@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Linq;
 using Itm.Database.Core.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Itm.Database.Core.EF.Repositories
 {
@@ -12,7 +12,7 @@ namespace Itm.Database.Core.EF.Repositories
 			var query = dbContext.Set<TEntity> ().AsQueryable ();
 
 			return pageSize > 0 && pageNumber > 0 ? query
-				.OrderBy(p => p.ID)
+				//.OrderBy(p => p.ID) TODO: Need Order?
 				.Skip ((pageNumber - 1) * pageSize)
 				.Take (pageSize) : query;
 		}

@@ -32,6 +32,6 @@ namespace Itm.Database.EntityLayer
 
 		public DateTime? LastUpdateDateTime { get; set; }
 
-		public Byte[] Timestamp { get; set; }
+		public byte[] Timestamp { get; set; }
 	}
 }

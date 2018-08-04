@@ -2,7 +2,7 @@
 using Itm.Database.Core.Contracts;
 using Microsoft.Extensions.Logging;
 
-namespace Itm.Database.Core.Responses
+namespace Itm.Database.Core.EF.Extensions
 {
 	public static class ResponseExtensions
 	{

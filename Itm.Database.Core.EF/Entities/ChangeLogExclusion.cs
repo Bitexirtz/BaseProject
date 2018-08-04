@@ -14,7 +14,5 @@ namespace Itm.Database.Core.EF.Entities
 		public string EntityName { get; set; }
 
 		public string PropertyName { get; set; }
-
-		public int RowID { get; set; }
 	}
 }

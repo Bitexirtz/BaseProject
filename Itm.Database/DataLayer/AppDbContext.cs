@@ -1,80 +1,114 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration;
-using System.Data.Entity.ModelConfiguration.Conventions;
+﻿using Itm.Database.Core.EF.Extensions;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Itm.Database.Core.EF.Entities;
-using Itm.Database.Core.Services;
-using Itm.Database.EntityLayer;
 
 namespace Itm.Database.DataLayer
 {
-	public class AppDbContext : DbContext
-	{
-		public AppDbContext (IDatabaseConnection connection)
-			: base (connection.NameOrConnectionString)
-		{
-			Configuration.LazyLoadingEnabled = false;
+    public class AppDbContext : DbContext
+    {
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+            : base(options)
+        {
+            Database.EnsureCreated();
+        }
 
-			System.Data.Entity.Database.SetInitializer<AppDbContext> (new CreateDatabaseIfNotExists<AppDbContext> ());
-		}
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            //Get configurations from current assembly, where this DbContext exists
+            var currentAssembly = GetType().Assembly;
+            modelBuilder.AddEntityConfigurationsFromAssembly(currentAssembly);
 
-		public DbSet<User> Users { get; set; }
-		public DbSet<ChangeLogExclusion> ChangeLogExclusions { get; set; }
-		public DbSet<ChangeLog> ChangeLogs { get; set; }
-		public DbSet<EventLog> EventLogs { get; set; }
-		
+            //Get configurations from referenced assembly, Database.Core.EF-Data Configurations
+            foreach (AssemblyName referencedAssembly in currentAssembly.GetReferencedAssemblies())
+            {
+                modelBuilder.AddEntityConfigurationsFromAssembly(Assembly.Load(referencedAssembly));
+            }
 
-		public AppDbContext () : base (@"Server=192.168.19.218;initial catalog=Iwsp.TCS_DB;Integrated Security=False;user id=sa;password=sata;MultipleActiveResultSets=True;")
-		{
-			Configuration.LazyLoadingEnabled = false;
+            base.OnModelCreating(modelBuilder);
+        }
 
-			//Database.SetInitializer<WriteDbContext> (new DropCreateDatabaseAlways<WriteDbContext> ());
-			System.Data.Entity.Database.SetInitializer<AppDbContext> (new CreateDatabaseIfNotExists<AppDbContext> ());
-		}
+        //TODO: Remove pluralizing
+        private static void RemoveConventions(ModelBuilder modelBuilder)
+        {
+            // equivalent of modelBuilder.Conventions.AddFromAssembly(Assembly.GetExecutingAssembly());
+            // look at this answer: https://stackoverflow.com/a/43075152/3419825
 
-		protected override void OnModelCreating (DbModelBuilder modelBuilder)
-		{
-			RemoveConventions (modelBuilder);
-			AddAllEntityConfigurations (modelBuilder);
+            // for the other conventions, we do a metadata model loop
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                // equivalent of modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+                //TODO: Remove<PluralizingTableNameConvention> not working
+                //entityType.Relational().TableName = entityType.DisplayName();
 
-			base.OnModelCreating (modelBuilder);
-		}
+                // equivalent of modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+                // and modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
+                entityType.GetForeignKeys()
+                    .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade)
+                    .ToList()
+                    .ForEach(fk => fk.DeleteBehavior = DeleteBehavior.Restrict);
+            }
 
-
-		private void AddAllEntityConfigurations (DbModelBuilder modelBuilder)
-		{
-			var configurationsToRegister = GetAllEntityConfigurationsToRegister ();
-
-			RegisterEntityTypeConfigurations (modelBuilder, configurationsToRegister);
-		}
-
-		private static void RegisterEntityTypeConfigurations (DbModelBuilder modelBuilder, IEnumerable<System.Type> configurationsToRegister)
-		{
-			foreach (var type in configurationsToRegister) {
-				dynamic configurationInstance = Activator.CreateInstance (type);
-				modelBuilder.Configurations.Add (configurationInstance);
-			}
-		}
-
-		private static IEnumerable<System.Type> GetAllEntityConfigurationsToRegister ()
-		{
-			var entityConfigurationsToRegister = Assembly.GetExecutingAssembly ().GetTypes ()
-				.Where (type => !String.IsNullOrEmpty (type.Namespace))
-				.Where (type => type.BaseType != null
-								&& type.BaseType.IsGenericType
-								&& type.BaseType.GetGenericTypeDefinition () == typeof (EntityTypeConfiguration<>));
-
-			return entityConfigurationsToRegister;
-		}
-
-		private static void RemoveConventions (DbModelBuilder modelBuilder)
-		{
-			modelBuilder.Conventions.Remove<PluralizingTableNameConvention> ();
-		}
-	}
+        }
+    }
 }
+
+/*
+public interface IEntityMappingConfiguration
+    {
+        void Map(ModelBuilder b);
+    }
+
+    public interface IEntityMappingConfiguration<T> : IEntityMappingConfiguration where T : class
+    {
+        void Map(EntityTypeBuilder<T> builder);
+    }
+
+    public abstract class EntityMappingConfiguration<T> : IEntityMappingConfiguration<T> where T : class
+    {
+        public abstract void Map(EntityTypeBuilder<T> b);
+
+        public void Map(ModelBuilder b)
+        {
+            Map(b.Entity<T>());
+        }
+    }
+
+    public static class ModelBuilderExtenions
+    {
+        private static IEnumerable<Type> GetMappingTypes(this Assembly assembly, Type mappingInterface)
+        {
+            return assembly.GetTypes().Where(x => !x.IsAbstract && x.GetInterfaces().Any(y => y.GetTypeInfo().IsGenericType && y.GetGenericTypeDefinition() == mappingInterface));
+        }
+
+        public static void AddEntityConfigurationsFromAssembly(this ModelBuilder modelBuilder, Assembly assembly)
+        {
+            var mappingTypes = assembly.GetMappingTypes(typeof (IEntityMappingConfiguration<>));
+            foreach (var config in mappingTypes.Select(Activator.CreateInstance).Cast<IEntityMappingConfiguration>())
+            {
+                config.Map(modelBuilder);
+            }
+        }
+    }
+
+    Use:
+
+    public class PersonConfiguration : EntityMappingConfiguration<Person>
+    {
+        public override void Map(EntityTypeBuilder<Person> b)
+        {
+            b.ToTable("Person", "HumanResources")
+                .HasKey(p => p.PersonID);
+
+            b.Property(p => p.FirstName).HasMaxLength(50).IsRequired();
+            b.Property(p => p.MiddleName).HasMaxLength(50);
+            b.Property(p => p.LastName).HasMaxLength(50).IsRequired();
+        }
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.AddEntityConfigurationsFromAssembly(GetType().Assembly);
+    }
+
+    */
