@@ -182,9 +182,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Itm.Database.Core.EF\Itm.Database.Repositories.csproj">
-      <Project>{0d3dce70-3d61-4ed1-829d-c4405081822c}</Project>
-      <Name>Itm.Database.Repositories</Name>
+    <ProjectReference Include="..\Itm.Database.Context\Itm.Database.Context.csproj">
+      <Project>{E68552BD-111F-4BE6-9652-4C3959DDD104}</Project>
+      <Name>Itm.Database.Context</Name>
     </ProjectReference>
     <ProjectReference Include="..\Itm.Database.Core\Itm.Database.Core.csproj">
       <Project>{b81adcef-3844-4ab1-bda2-dde4e01e3c01}</Project>
@@ -197,10 +197,6 @@
     <ProjectReference Include="..\Itm.Database.Services\Itm.Database.Services.csproj">
       <Project>{EED453AD-9272-48F2-8616-EA2545792D9F}</Project>
       <Name>Itm.Database.Services</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Itm.Database\Itm.Database.Context.csproj">
-      <Project>{e68552bd-111f-4be6-9652-4c3959ddd104}</Project>
-      <Name>Itm.Database.Context</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

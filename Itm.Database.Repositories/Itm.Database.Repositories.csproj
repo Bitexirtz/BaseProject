@@ -123,7 +123,7 @@
       <Project>{B489914F-1D65-44DF-BFA6-6DEDD7FB1631}</Project>
       <Name>Itm.Database.Entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Itm.Database\Itm.Database.Context.csproj">
+    <ProjectReference Include="..\Itm.Database.Context\Itm.Database.Context.csproj">
       <Project>{e68552bd-111f-4be6-9652-4c3959ddd104}</Project>
       <Name>Itm.Database.Context</Name>
     </ProjectReference>
