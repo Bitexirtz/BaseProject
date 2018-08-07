@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Itm.Database.Core.Services;
-using Itm.Database.EntityLayer;
+using Itm.Database.Core.Data;
+using Itm.Database.Entities;
 
 namespace Itm.Database.DataLayer.Contracts
 {

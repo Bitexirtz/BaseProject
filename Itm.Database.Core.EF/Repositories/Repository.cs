@@ -1,15 +1,15 @@
-﻿using Itm.Database.Core.Contracts;
-using Itm.Database.Core.EF.Entities;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Itm.Database.Core.Entities;
+using Itm.Database.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Itm.Database.Core.EF.Repositories
 {
-    public abstract class Repository
+	public abstract class Repository
 	{
 		protected IUserInfo UserInfo;
 		protected DbContext DbContext;

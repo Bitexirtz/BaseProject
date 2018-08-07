@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Itm.Database.Core.Contracts;
+﻿using Itm.Database.Core.Entities;
 
 namespace Itm.Database.Console
 {

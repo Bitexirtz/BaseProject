@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Itm.Database.Core.Contracts;
+using Itm.Database.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Itm.Database.Core.EF.Repositories

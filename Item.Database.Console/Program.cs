@@ -2,12 +2,11 @@
 using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
-using Itm.Database.BusinessLayer.Contracts;
-using Itm.Database.BusinessLayer.Services;
-using Itm.Database.Core.Contracts;
+using Itm.Database.Context;
+using Itm.Database.Core.Entities;
 using Itm.Database.Core.Services;
-using Itm.Database.DataLayer;
-using Itm.Database.EntityLayer;
+using Itm.Database.Entities;
+using Itm.Database.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Unity;
@@ -16,7 +15,7 @@ using Unity.Lifetime;
 
 namespace Itm.Database.Console
 {
-    class Program
+	class Program
     {
         static void Main(string[] args)
         {

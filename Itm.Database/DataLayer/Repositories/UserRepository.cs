@@ -1,14 +1,15 @@
-﻿using Itm.Database.Core.Contracts;
-using Itm.Database.Core.EF.Repositories;
-using Itm.Database.DataLayer.Contracts;
-using Itm.Database.EntityLayer;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using Itm.Database.Context;
+using Itm.Database.Core.EF.Repositories;
+using Itm.Database.Core.Entities;
+using Itm.Database.DataLayer.Contracts;
+using Itm.Database.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Itm.Database.DataLayer.Repositories
 {
-    public class UserRepository : Repository, IUserRepository
+	public class UserRepository : Repository, IUserRepository
 	{
 		public UserRepository (IUserInfo userInfo, AppDbContext dbContext)
             : base(userInfo, dbContext)

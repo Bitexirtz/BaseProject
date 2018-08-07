@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B81ADCEF-3844-4AB1-BDA2-DDE4E01E3C01}</ProjectGuid>
+    <ProjectGuid>{B489914F-1D65-44DF-BFA6-6DEDD7FB1631}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Itm.Database.Core</RootNamespace>
-    <AssemblyName>Itm.Database.Core</AssemblyName>
+    <RootNamespace>Itm.Database.Entities</RootNamespace>
+    <AssemblyName>Itm.Database.Entities</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,24 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Services\IDatabaseConnection.cs" />
-    <Compile Include="Entities\IUserInfo.cs" />
-    <Compile Include="Exception\DatabaseException.cs" />
-    <Compile Include="Data\IRepository.cs" />
-    <Compile Include="Entities\IAuditableEntity.cs" />
-    <Compile Include="Entities\IEntity.cs" />
+    <Compile Include="ChangeLog.cs" />
+    <Compile Include="ChangeLogExclusion.cs" />
+    <Compile Include="EventLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\IRequest.cs" />
-    <Compile Include="Services\ResponseTypes\IListResponse.cs" />
-    <Compile Include="Services\ResponseTypes\IPagedResponse.cs" />
-    <Compile Include="Services\ResponseTypes\IResponse.cs" />
-    <Compile Include="Services\ResponseTypes\ISingleResponse.cs" />
-    <Compile Include="Services\ResponseTypes\ListResponse.cs" />
-    <Compile Include="Services\ResponseTypes\PagedResponse.cs" />
-    <Compile Include="Services\ResponseTypes\SingleResponse.cs" />
-    <Compile Include="Services\IService.cs" />
+    <Compile Include="User.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Itm.Database.Core\Itm.Database.Core.csproj">
+      <Project>{B81ADCEF-3844-4AB1-BDA2-DDE4E01E3C01}</Project>
+      <Name>Itm.Database.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
