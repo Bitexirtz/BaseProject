@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Itm.Database.Core", "Itm.Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Itm.Common", "Itm.Common\Itm.Common.csproj", "{934D8065-9B3A-4B4E-8366-FC6F696EB95A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Itm.Database.Console", "Item.Database.Console\Itm.Database.Console.csproj", "{F8D585BE-AEDC-42AE-BBFA-292FD30805AB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Itm.Database.Console", "Itm.Database.Console\Itm.Database.Console.csproj", "{F8D585BE-AEDC-42AE-BBFA-292FD30805AB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{316E1C81-B5D2-4AB4-865F-D40844BEC718}"
 	ProjectSection(SolutionItems) = preProject
