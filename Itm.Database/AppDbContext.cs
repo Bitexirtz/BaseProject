@@ -1,11 +1,10 @@
 ﻿using System.Linq;
-using System.Reflection;
 using Itm.Database.Itm.Database.Context.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Itm.Database.Context
 {
-	public class AppDbContext : DbContext
+    public class AppDbContext : DbContext
 	{
 		public AppDbContext (DbContextOptions<AppDbContext> options)
 			: base (options)

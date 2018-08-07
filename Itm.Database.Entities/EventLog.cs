@@ -5,7 +5,7 @@ namespace Itm.Database.Entities
 {
 	public class EventLog : IEntity
 	{
-		public EventLog ()
+		public EventLog()
 		{
 		}
 

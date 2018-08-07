@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Itm.Database.Itm.Database.Context.Extensions
 {
-	internal static class ModelBuilderExtenions
+	internal static class ModelBuilderExtension
     {
         private static IEnumerable<Type> GetMappingTypes(this Assembly assembly, Type mappingInterface)
         {

@@ -11,9 +11,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Itm.Database.Services
 {
-	public class UserService : ServiceBase, IUserService
+	public class UserService : BaseService, IUserService
 	{
-		public UserService (ILogger logger, IUserInfo userInfo, AppDbContext dbContext)
+		public UserService (ILogger logger, IAppUser userInfo, AppDbContext dbContext)
 			: base (logger, userInfo, dbContext)
 		{
 		}

@@ -7,8 +7,8 @@
     <ProjectGuid>{0D3DCE70-3D61-4ED1-829D-C4405081822C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Itm.Database.Core.EF</RootNamespace>
-    <AssemblyName>Itm.Database.Core.EF</AssemblyName>
+    <RootNamespace>Itm.Database.Repositories</RootNamespace>
+    <AssemblyName>Itm.Database.Repositories</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -108,9 +108,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IUserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\Repository.cs" />
-    <Compile Include="Repositories\RepositoryExtensions.cs" />
+    <Compile Include="BaseRepository.cs" />
+    <Compile Include="Extensions\RepositoryExtensions.cs" />
+    <Compile Include="UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Itm.Database.Core\Itm.Database.Core.csproj">
@@ -120,6 +122,10 @@
     <ProjectReference Include="..\Itm.Database.Entities\Itm.Database.Entities.csproj">
       <Project>{B489914F-1D65-44DF-BFA6-6DEDD7FB1631}</Project>
       <Name>Itm.Database.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Itm.Database\Itm.Database.Context.csproj">
+      <Project>{e68552bd-111f-4be6-9652-4c3959ddd104}</Project>
+      <Name>Itm.Database.Context</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -16,56 +16,56 @@ using Unity.Lifetime;
 namespace Itm.Database.Console
 {
 	class Program
-    {
-        static void Main(string[] args)
-        {
-            IUnityContainer container = new UnityContainer();
+	{
+		static void Main(string[] args)
+		{
+			IUnityContainer container = new UnityContainer();
 
-            #region SQL Server
-            var dbConnection = ConfigurationManager.ConnectionStrings["AppDbConnection"].ConnectionString;
-            container.RegisterType<IDatabaseConnection, DefaultDatabaseConnection>(new InjectionConstructor(dbConnection));
-            var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseSqlServer(dbConnection)
-            .Options;
-            #endregion SQL Server
+			#region SQL Server
+			var dbConnection = ConfigurationManager.ConnectionStrings["AppDbConnection"].ConnectionString;
+			container.RegisterType<IDatabaseConnection, DefaultDatabaseConnection>(new InjectionConstructor(dbConnection));
+			var options = new DbContextOptionsBuilder<AppDbContext>()
+			.UseSqlServer(dbConnection)
+			.Options;
+			#endregion SQL Server
 
-            #region SQLite
-            //var options = new DbContextOptionsBuilder<AppDbContext>()
-            //    .UseSqlite("Data Source=AppData.db;").Options;
-            #endregion SQLite
+			#region SQLite
+			//var options = new DbContextOptionsBuilder<AppDbContext>()
+			//    .UseSqlite("Data Source=AppData.db;").Options;
+			#endregion SQLite
 
-            container.RegisterType<AppDbContext>(new TransientLifetimeManager(), new InjectionConstructor(options));
-            container.RegisterType<IUserInfo, UserInfo>();
-            container.RegisterType<ILogger>(new InjectionFactory((c) => null));
-            container.RegisterType<IUserService, UserService>();
-            IUserInfo user = container.Resolve<IUserInfo>();
+			container.RegisterType<AppDbContext>(new TransientLifetimeManager(), new InjectionConstructor(options));
+			container.RegisterType<IAppUser, AppUser>();
+			container.RegisterType<ILogger>(new InjectionFactory((c) => null));
+			container.RegisterType<IUserService, UserService>();
+			IAppUser user = container.Resolve<IAppUser>();
 
-            MainAsync(container).Wait();
-        }
+			MainAsync(container).Wait();
+		}
 
-        static async Task MainAsync(IUnityContainer container)
-        {
-            IUserService repo = container.Resolve<IUserService>();
+		static async Task MainAsync(IUnityContainer container)
+		{
+			IUserService repo = container.Resolve<IUserService>();
 
-            var newUser = new User
-            {
-                FirstName = "User-" + DateTime.Now.ToString(),
-                BirthDate = DateTime.Now,
-                LastName = "Last Name"
-            };
-
-
-            await repo.AddUserAsync(newUser);
-
-            var updateUser = repo.GetUsersByIDAsync(1);
-            updateUser.Result.Model.FirstName = "Modified First Name";
-
-            await repo.UpdateUserAsync(updateUser.Result.Model);
-
-            var list = repo.GetUsersAsync().Result.Model.ToList();
+			var newUser = new User
+			{
+				FirstName = "User-" + DateTime.Now.ToString(),
+				BirthDate = DateTime.Now,
+				LastName = "Last Name"
+			};
 
 
-            System.Console.WriteLine(list.Count);
-        }
-    }
+			await repo.AddUserAsync(newUser);
+
+			var updateUser = repo.GetUsersByIDAsync(1);
+			updateUser.Result.Model.FirstName = "Modified First Name";
+
+			await repo.UpdateUserAsync(updateUser.Result.Model);
+
+			var list = repo.GetUsersAsync().Result.Model.ToList();
+
+
+			System.Console.WriteLine(list.Count);
+		}
+	}
 }

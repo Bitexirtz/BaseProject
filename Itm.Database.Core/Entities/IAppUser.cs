@@ -1,6 +1,6 @@
 ﻿namespace Itm.Database.Core.Entities
 {
-	public interface IUserInfo
+	public interface IAppUser
 	{
 		int ID { get; set; }
 		string Name { get; set; }

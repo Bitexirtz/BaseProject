@@ -5,11 +5,11 @@ namespace Itm.Database.Entities
 {
 	public class User : IAuditableEntity
 	{
-		public User ()
+		public User()
 		{
 		}
 
-		public User (int userID)
+		public User(int userID)
 		{
 			ID = userID;
 		}

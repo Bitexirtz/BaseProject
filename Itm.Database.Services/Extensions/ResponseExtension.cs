@@ -1,11 +1,10 @@
-﻿using System;
-using Itm.Database.Core.Exception;
+﻿using Itm.Database.Core.Exception;
 using Itm.Database.Core.Services.ResponseTypes;
 using Microsoft.Extensions.Logging;
 
 namespace Itm.Database.Core.EF.Extensions
 {
-	internal static class ResponseExtensions
+	internal static class ResponseExtension
 	{
 		public static void SetError (this IResponse response, System.Exception ex, ILogger logger)
 		{

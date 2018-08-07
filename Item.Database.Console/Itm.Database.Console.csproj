@@ -176,16 +176,15 @@
     <Compile Include="DefaultDatabaseConnection.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Itm.Database.Core.EF\Itm.Database.Core.EF.csproj">
+    <ProjectReference Include="..\Itm.Database.Core.EF\Itm.Database.Repositories.csproj">
       <Project>{0d3dce70-3d61-4ed1-829d-c4405081822c}</Project>
-      <Name>Itm.Database.Core.EF</Name>
+      <Name>Itm.Database.Repositories</Name>
     </ProjectReference>
     <ProjectReference Include="..\Itm.Database.Core\Itm.Database.Core.csproj">
       <Project>{b81adcef-3844-4ab1-bda2-dde4e01e3c01}</Project>

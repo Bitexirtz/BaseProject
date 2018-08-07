@@ -1,11 +1,10 @@
-﻿using System;
-using Itm.Database.Core.Entities;
+﻿using Itm.Database.Core.Entities;
 
 namespace Itm.Database.Entities
 {
 	public class ChangeLogExclusion : IEntity
 	{
-		public ChangeLogExclusion ()
+		public ChangeLogExclusion()
 		{
 		}
 
