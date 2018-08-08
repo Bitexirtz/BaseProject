@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="CommonServiceLocator, Version=2.0.3.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.5.8.6\lib\net47\CommonServiceLocator.dll</HintPath>
       <Private>True</Private>
@@ -137,6 +140,10 @@
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.1\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -197,6 +204,14 @@
     <ProjectReference Include="..\Itm.Database.Services\Itm.Database.Services.csproj">
       <Project>{EED453AD-9272-48F2-8616-EA2545792D9F}</Project>
       <Name>Itm.Database.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Itm.Models\Itm.Models.csproj">
+      <Project>{4267178D-85C9-4918-9CB0-C7D8E32B66B5}</Project>
+      <Name>Itm.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Itm.ObjectMapper\Itm.ObjectMapper.csproj">
+      <Project>{048FB41D-0043-4EA3-814B-682951586D2A}</Project>
+      <Name>Itm.ObjectMapper</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

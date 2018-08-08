@@ -1,4 +1,5 @@
-﻿using Itm.Database.Context;
+﻿using AutoMapper;
+using Itm.Database.Context;
 using Itm.Database.Core.Entities;
 using Itm.Database.Core.Services;
 using Itm.Database.Repositories;
@@ -9,15 +10,17 @@ namespace Itm.Database.Services
 	public abstract class BaseService : IService
 	{
 		protected ILogger Logger;
+		protected IMapper Mapper;
 		protected IAppUser UserInfo;
 		protected bool Disposed;
 		protected readonly AppDbContext DbContext;
 
 		protected IUserRepository m_userRepository;
 
-		public BaseService(ILogger logger, IAppUser userInfo, AppDbContext dbContext)
+		public BaseService(ILogger logger, IMapper mapper, IAppUser userInfo, AppDbContext dbContext)
 		{
 			Logger = logger;
+			Mapper = mapper;
 			UserInfo = userInfo;
 			DbContext = dbContext;
 		}

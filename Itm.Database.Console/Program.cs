@@ -2,11 +2,13 @@
 using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Itm.Database.Context;
 using Itm.Database.Core.Entities;
 using Itm.Database.Core.Services;
-using Itm.Database.Entities;
 using Itm.Database.Services;
+using Itm.Models;
+using Itm.ObjectMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Unity;
@@ -35,6 +37,10 @@ namespace Itm.Database.Console
 			#endregion SQLite
 
 			container.RegisterType<AppDbContext>(new TransientLifetimeManager(), new InjectionConstructor(options));
+
+			container.RegisterType<ObjectMapperProvider>(new TransientLifetimeManager());
+			container.RegisterInstance(container.Resolve<ObjectMapperProvider>().Mapper);
+
 			container.RegisterType<IAppUser, AppUser>();
 			container.RegisterType<ILogger>(new InjectionFactory((c) => null));
 			container.RegisterType<IUserService, UserService>();
@@ -47,7 +53,7 @@ namespace Itm.Database.Console
 		{
 			IUserService repo = container.Resolve<IUserService>();
 
-			var newUser = new User
+			var newUser = new UserModel
 			{
 				FirstName = "User-" + DateTime.Now.ToString(),
 				BirthDate = DateTime.Now,
@@ -62,10 +68,11 @@ namespace Itm.Database.Console
 
 			await repo.UpdateUserAsync(updateUser.Result.Model);
 
-			var list = repo.GetUsersAsync().Result.Model.ToList();
+			//TODO: Error here not mapped correctly
+			//var list = repo.GetUsersAsync().Result.Model.ToList();
 
 
-			System.Console.WriteLine(list.Count);
+			//System.Console.WriteLine(list.Count);
 		}
 	}
 }

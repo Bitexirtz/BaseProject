@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.EntityFrameworkCore, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.EntityFrameworkCore.2.1.1\lib\netstandard2.0\Microsoft.EntityFrameworkCore.dll</HintPath>
     </Reference>
@@ -100,6 +103,10 @@
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.1\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -131,6 +138,14 @@
     <ProjectReference Include="..\Itm.Database.Repositories\Itm.Database.Repositories.csproj">
       <Project>{0D3DCE70-3D61-4ED1-829D-C4405081822C}</Project>
       <Name>Itm.Database.Repositories</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Itm.Models\Itm.Models.csproj">
+      <Project>{4267178D-85C9-4918-9CB0-C7D8E32B66B5}</Project>
+      <Name>Itm.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Itm.ObjectMapper\Itm.ObjectMapper.csproj">
+      <Project>{048fb41d-0043-4ea3-814b-682951586d2a}</Project>
+      <Name>Itm.ObjectMapper</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
