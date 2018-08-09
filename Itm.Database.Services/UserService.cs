@@ -28,7 +28,10 @@ namespace Itm.Database.Services
 			var response = new ListResponse<UserModel> ();
 
 			try {
-				response.Model = Mapper.Map <IQueryable<UserModel>> (await UserRepository.GetAll (pageSize, pageNumber).ToListAsync ());
+
+				/*response.Model =*/// await UserRepository.GetAll (pageSize, pageNumber).ToListAsync ();
+
+				response.Model = await UserRepository.GetAll (pageSize, pageNumber).Select (o => Mapper.Map<UserModel> (o)).ToListAsync ();
 			}
 			catch (Exception ex) {
 				response.SetError (ex, Logger);
@@ -44,7 +47,7 @@ namespace Itm.Database.Services
 			var response = new SingleResponse<UserModel> ();
 
 			try {
-				response.Model = Mapper.Map<UserModel>(await UserRepository.GetByIDAsync (userID));
+				response.Model = Mapper.Map<UserModel> (await UserRepository.GetByIDAsync (userID));
 			}
 			catch (Exception ex) {
 				response.SetError (ex, Logger);
@@ -60,7 +63,7 @@ namespace Itm.Database.Services
 
 			using (var transaction = DbContext.Database.BeginTransaction ()) {
 				try {
-					await UserRepository.AddAsync (Mapper.Map<User>(details));
+					await UserRepository.AddAsync (Mapper.Map<User> (details));
 
 					transaction.Commit ();
 				}
@@ -81,7 +84,7 @@ namespace Itm.Database.Services
 
 			using (var transaction = DbContext.Database.BeginTransaction ()) {
 				try {
-					await UserRepository.UpdateAsync (Mapper.Map<User>(updates));
+					await UserRepository.UpdateAsync (Mapper.Map<User> (updates));
 
 					transaction.Commit ();
 					response.Model = updates;

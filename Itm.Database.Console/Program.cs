@@ -66,13 +66,11 @@ namespace Itm.Database.Console
 			var updateUser = repo.GetUsersByIDAsync(1);
 			updateUser.Result.Model.FirstName = "Modified First Name";
 
-			await repo.UpdateUserAsync(updateUser.Result.Model);
+			await repo.UpdateUserAsync (updateUser.Result.Model);
 
-			//TODO: Error here not mapped correctly
-			//var list = repo.GetUsersAsync().Result.Model.ToList();
+			var list = repo.GetUsersAsync ().Result.Model.ToList ();
 
-
-			//System.Console.WriteLine(list.Count);
+			System.Console.WriteLine (list.Count);
 		}
 	}
 }
