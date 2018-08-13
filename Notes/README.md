@@ -12,3 +12,4 @@ The architecture for enterprise application should have at least the following l
 |		|	           DB Configurations	|	No	|	Configuration	|	Configuration: Object property to DB field mapping	|
 |		|	DB Repositories	|	Yes	|	Repository	|		|
 |	Business Layer	|	DB Service	|	Yes	|	Service	|		|
+
