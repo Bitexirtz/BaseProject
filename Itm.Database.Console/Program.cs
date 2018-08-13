@@ -41,7 +41,7 @@ namespace Itm.Database.Console
 			container.RegisterType<ObjectMapperProvider>(new TransientLifetimeManager());
 			container.RegisterInstance(container.Resolve<ObjectMapperProvider>().Mapper);
 
-			container.RegisterType<IAppUser, AppUser>();
+			container.RegisterType<IAppUser, AppUser>(new InjectionConstructor(1, "LoggedUser"));
 			container.RegisterType<ILogger>(new InjectionFactory((c) => null));
 			container.RegisterType<IUserService, UserService>();
 			IAppUser user = container.Resolve<IAppUser>();

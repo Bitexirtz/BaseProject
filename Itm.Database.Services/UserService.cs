@@ -64,16 +64,15 @@ namespace Itm.Database.Services
 			using (var transaction = DbContext.Database.BeginTransaction ()) {
 				try {
 
-					var user = Mapper.Map<User> (details);
-					await UserRepository.AddAsync (user);
+					var user = Mapper.Map<User>(details);
+					await UserRepository.AddAsync(user);
 
-					var userCredential = Mapper.Map<UserCredential> (details);
-					await UserCredentialRepository.AddAsync (userCredential);
-
-					
+					var userCredential = Mapper.Map<UserCredential>(details);
+					userCredential.User = user;
+					await UserCredentialRepository.AddAsync(userCredential);
 
 					transaction.Commit ();
-					//response.Model = Mapper.Map<UserModel> (user);
+					response.Model = Mapper.Map<UserModel> (user);
 				}
 				catch (Exception ex) {
 					transaction.Rollback ();

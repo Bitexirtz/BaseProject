@@ -8,28 +8,28 @@ namespace Itm.Database.ObjectMapper
 	{
 		public UserProfile()
 		{
-			CreateMap<User, UserModel> ()
-				.ForMember (
+			CreateMap<UserModel, User>();
+			CreateMap<UserModel, UserCredential>();
+
+			//CreateMap<UserModel, User> ()
+			//	.ForMember<UserCredential> (
+			//		dest => dest.UserCredential,
+			//		opt => opt.MapFrom (src => new UserCredential
+			//		{
+			//			 UserName = src.UserName,
+			//			 Password = src.Password
+			//		})
+			//	);
+
+			CreateMap<User, UserModel>()
+				.ForMember(
 					dest => dest.UserName,
-					opt => opt.MapFrom (src => src.UserCredential.UserName)
+					opt => opt.MapFrom(src => src.UserCredential.UserName)
 				)
-				.ForMember (
+				.ForMember(
 					dest => dest.Password,
-					opt => opt.MapFrom (src => src.UserCredential.Password)
+					opt => opt.MapFrom(src => src.UserCredential.Password)
 				);
-
-			CreateMap<UserModel, User> ()
-				.ForMember<UserCredential> (
-					dest => dest.UserCredential,
-					opt => opt.MapFrom (src => new UserCredential
-					{
-						 UserName = src.UserName,
-						 Password = src.Password
-					})
-				);
-
-			CreateMap<UserModel, UserCredential> ();
-			CreateMap<UserCredential, UserModel> ();
 		}
 	}
 }
