@@ -5,6 +5,7 @@ The architecture includes the following levels:
 1. Entity Layer: Contains entities (POCOs)
 2. Data Layer: Contains all related code to database access
 3. Business Layer: Contains definitions and validations related to business
+4. Presentation Layer: Contains User Interfaces
 
 | Layer | Content | Has Interface | Prefix | Remarks |
  ----------- | ----------- | ----------- | ----------- | ----------- |
