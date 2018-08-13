@@ -143,10 +143,6 @@
       <Project>{4267178D-85C9-4918-9CB0-C7D8E32B66B5}</Project>
       <Name>Itm.Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Itm.ObjectMapper\Itm.ObjectMapper.csproj">
-      <Project>{048fb41d-0043-4ea3-814b-682951586d2a}</Project>
-      <Name>Itm.ObjectMapper</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -116,6 +116,7 @@
     <Compile Include="Configurations\IEntityMappingConfiguration.cs" />
     <Compile Include="Configurations\UserConfiguration.cs" />
     <Compile Include="AppDbContext.cs" />
+    <Compile Include="Configurations\UserCredentialConfiguration.cs" />
     <Compile Include="Extensions\ModelBuilderExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

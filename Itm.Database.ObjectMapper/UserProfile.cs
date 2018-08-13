@@ -1,0 +1,35 @@
+﻿using AutoMapper;
+using Itm.Database.Entities;
+using Itm.Models;
+
+namespace Itm.Database.ObjectMapper
+{
+	public class UserProfile : Profile
+	{
+		public UserProfile()
+		{
+			CreateMap<User, UserModel> ()
+				.ForMember (
+					dest => dest.UserName,
+					opt => opt.MapFrom (src => src.UserCredential.UserName)
+				)
+				.ForMember (
+					dest => dest.Password,
+					opt => opt.MapFrom (src => src.UserCredential.Password)
+				);
+
+			CreateMap<UserModel, User> ()
+				.ForMember<UserCredential> (
+					dest => dest.UserCredential,
+					opt => opt.MapFrom (src => new UserCredential
+					{
+						 UserName = src.UserName,
+						 Password = src.Password
+					})
+				);
+
+			CreateMap<UserModel, UserCredential> ();
+			CreateMap<UserCredential, UserModel> ();
+		}
+	}
+}

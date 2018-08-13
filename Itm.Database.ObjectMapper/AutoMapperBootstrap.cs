@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Itm.ObjectMapper
+namespace Itm.Database.ObjectMapper
 {
 	public class ObjectMapperProvider
 	{

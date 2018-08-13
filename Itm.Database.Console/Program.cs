@@ -8,7 +8,7 @@ using Itm.Database.Core.Entities;
 using Itm.Database.Core.Services;
 using Itm.Database.Services;
 using Itm.Models;
-using Itm.ObjectMapper;
+using Itm.Database.ObjectMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Unity;
@@ -57,16 +57,18 @@ namespace Itm.Database.Console
 			{
 				FirstName = "User-" + DateTime.Now.ToString(),
 				BirthDate = DateTime.Now,
-				LastName = "Last Name"
+				LastName = "Last Name",
+				UserName = "Username",
+				Password = "Password"
 			};
 
 
 			await repo.AddUserAsync(newUser);
 
-			var updateUser = repo.GetUsersByIDAsync(1);
-			updateUser.Result.Model.FirstName = "Modified First Name";
+			//var updateUser = repo.GetUsersByIDAsync(1);
+			//updateUser.Result.Model.FirstName = "Modified First Name";
 
-			await repo.UpdateUserAsync (updateUser.Result.Model);
+			//await repo.UpdateUserAsync (updateUser.Result.Model);
 
 			var list = repo.GetUsersAsync ().Result.Model.ToList ();
 

@@ -16,6 +16,7 @@ namespace Itm.Database.Services
 		protected readonly AppDbContext DbContext;
 
 		protected IUserRepository m_userRepository;
+		protected IUserCredentialRepository m_userCredentialRepository;
 
 		public BaseService(ILogger logger, IMapper mapper, IAppUser userInfo, AppDbContext dbContext)
 		{
@@ -41,5 +42,7 @@ namespace Itm.Database.Services
 		}
 
 		protected IUserRepository UserRepository => m_userRepository ?? (m_userRepository = new UserRepository(UserInfo, this.DbContext));
+
+		protected IUserCredentialRepository UserCredentialRepository => m_userCredentialRepository ?? (m_userCredentialRepository = new UserCredentialRepository (UserInfo, this.DbContext));
 	}
 }
