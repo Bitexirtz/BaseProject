@@ -25,6 +25,6 @@ namespace Itm.Database.Entities
 
 		public DateTime? LastUpdateDateTime { get; set; }
 
-		public byte[] Timestamp { get; set; }
+		public DateTime? Timestamp { get; set; }
 	}
 }

@@ -23,17 +23,15 @@ namespace Itm.Database.Console
 		{
 			IUnityContainer container = new UnityContainer();
 
-			#region SQL Server
 			var dbConnection = ConfigurationManager.ConnectionStrings["AppDbConnection"].ConnectionString;
 			container.RegisterType<IDatabaseConnection, DefaultDatabaseConnection>(new InjectionConstructor(dbConnection));
-			var options = new DbContextOptionsBuilder<AppDbContext>()
-			.UseSqlServer(dbConnection)
-			.Options;
+
+			#region SQL Server
+			//var options = new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(dbConnection).Options;
 			#endregion SQL Server
 
 			#region SQLite
-			//var options = new DbContextOptionsBuilder<AppDbContext>()
-			//    .UseSqlite("Data Source=AppData.db;").Options;
+			var options = new DbContextOptionsBuilder<AppDbContext>().UseSqlite("Data Source=AppData.db;").Options;
 			#endregion SQLite
 
 			container.RegisterType<AppDbContext>(new TransientLifetimeManager(), new InjectionConstructor(options));
@@ -65,13 +63,14 @@ namespace Itm.Database.Console
 
 			await repo.AddUserAsync(newUser);
 
-			//var updateUser = repo.GetUsersByIDAsync(1);
-			//updateUser.Result.Model.FirstName = "Modified First Name";
-
-			//await repo.UpdateUserAsync (updateUser.Result.Model);
+			var updateUser = repo.GetUsersByIDAsync(1);
+			if(updateUser.Result.Model != null && updateUser.Result.DidError == false)
+			{
+				updateUser.Result.Model.FirstName = "Modified First Name";
+				await repo.UpdateUserAsync(updateUser.Result.Model);
+			}
 
 			var list = repo.GetUsersAsync ().Result.Model.ToList ();
-
 			System.Console.WriteLine (list.Count);
 		}
 	}

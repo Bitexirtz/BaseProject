@@ -22,6 +22,7 @@ namespace Itm.Database.Entities
 
 		public string LastName { get; set; }
 
+		public int UserCredentiallID { get; set; }
 		public virtual UserCredential UserCredential { get; set; }
 
 		public DateTime? BirthDate { get; set; }
@@ -34,6 +35,7 @@ namespace Itm.Database.Entities
 
 		public DateTime? LastUpdateDateTime { get; set; }
 
-		public byte[] Timestamp { get; set; }
+		public DateTime? Timestamp { get; set; }
+		
 	}
 }

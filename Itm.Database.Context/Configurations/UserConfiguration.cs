@@ -1,4 +1,5 @@
 ﻿using Itm.Database.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Itm.Database.Context.Configurations
@@ -12,14 +13,17 @@ namespace Itm.Database.Context.Configurations
 			builder.HasIndex (t => t.ID);
 
 			// Set concurrency token for entity
-			builder.Property (t => t.Timestamp)
-				.ValueGeneratedOnAddOrUpdate ()
-				.IsRowVersion ();
+			builder.Property(t => t.Timestamp)
+				.ValueGeneratedOnAddOrUpdate()
+				.HasDefaultValueSql("CURRENT_TIMESTAMP")
+				.IsRowVersion();
 
 			// One To One Relation
-			builder.HasOne (t => t.UserCredential)
-					.WithOne (t => t.User)
-					.HasForeignKey<UserCredential> (t => t.UserID);
+			builder.HasOne(t => t.UserCredential)
+					.WithOne(t => t.User)
+					.HasForeignKey<UserCredential>(t => t.UserID);
+					//TODO: How to configure bidirectional navigation?
+					//.HasForeignKey<User>(t=>t.UserCredentiallID);
 		}
 	}
 }

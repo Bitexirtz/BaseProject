@@ -47,7 +47,15 @@ namespace Itm.Database.Services
 			var response = new SingleResponse<UserModel> ();
 
 			try {
-				response.Model = Mapper.Map<UserModel> (await UserRepository.GetByIDAsync (userID));
+				var userDetails = await UserRepository.GetByIDAsync(userID);
+
+				if(userDetails != null)
+				{
+					// Load also User Credentials
+					DbContext.Entry(userDetails).Reference(r => r.UserCredential).Load();
+				}
+
+				response.Model = Mapper.Map<UserModel> (userDetails);
 			}
 			catch (Exception ex) {
 				response.SetError (ex, Logger);
@@ -91,7 +99,8 @@ namespace Itm.Database.Services
 
 			using (var transaction = DbContext.Database.BeginTransaction ()) {
 				try {
-					await UserRepository.UpdateAsync (Mapper.Map<User> (updates));
+					var userChanges = Mapper.Map<User>(updates);
+					await UserRepository.UpdateAsync (userChanges);
 
 					transaction.Commit ();
 					response.Model = updates;
