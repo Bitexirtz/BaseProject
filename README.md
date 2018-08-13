@@ -1,6 +1,7 @@
 # ITM Base Solution
 
-The architecture for enterprise application should have at least the following levels:
+## Architecture
+The architecture includes the following levels:
 1. Entity Layer: Contains entities (POCOs)
 2. Data Layer: Contains all related code to database access
 3. Business Layer: Contains definitions and validations related to business
@@ -13,8 +14,11 @@ The architecture for enterprise application should have at least the following l
 |  | DB Repositories | Yes | Repository |  |
 | Business Layer | DB Service | Yes | Service |  |
 
-# How to add a new Table and access it to UI
+## How to add a new Table and access it to UI
 | No. | Content | Target Project | Remarks |
  ----------- | ----------- | ----------- | ----------- |
-| 1. | Add new class and with properties. | Itm.Database.Entities | Class name is mapped as table name and properties as field names. |
+| 1. | Add new class and with properties. | [Itm.Database.Entities][1] | Class name is mapped as table name and properties as field names. |
 | 2. | No | Itm.Database.Context |  |
+
+
+[1]: Itm.Database.Entities/
