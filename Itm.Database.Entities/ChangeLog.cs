@@ -23,6 +23,10 @@ namespace Itm.Database.Entities
 
 		public string UserName { get; set; }
 
+		public string IPv4 { get; set; }
+
+		public string HostName { get; set; }
+
 		public DateTime? ChangeDate { get; set; }
 	}
 }

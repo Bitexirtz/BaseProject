@@ -4,7 +4,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
 using Itm.Database.Context;
-using Itm.Database.Core.EF.Extensions;
+using Itm.Database.Services.Extensions;
+using Itm.Database.Core.Exception;
 using Itm.Database.Core.Entities;
 using Itm.Database.Core.Services.ResponseTypes;
 using Itm.Database.Entities;
@@ -99,11 +100,24 @@ namespace Itm.Database.Services
 
 			using (var transaction = DbContext.Database.BeginTransaction ()) {
 				try {
-					var userChanges = Mapper.Map<User>(updates);
-					await UserRepository.UpdateAsync (userChanges);
+
+					User user = await UserRepository.GetByIDAsync (updates.ID);
+					if(user == null) {
+						throw new DatabaseException ("User record not found.");
+					}
+
+					DbContext.Entry (user).Reference (r => r.UserCredential).Load ();
+
+					//DO NOT USE: Will set User properties to NULL if property not exists in UserModel. Use instead: Mapper.Map(updates, user);
+					//user = Mapper.Map<User> (updates); 
+
+					Mapper.Map(updates, user);
+					//Mapper.Map<UserCredential> (updates);
+
+					await UserRepository.UpdateAsync (user);
 
 					transaction.Commit ();
-					response.Model = updates;
+					response.Model = Mapper.Map<UserModel>(user);
 				}
 				catch (Exception ex) {
 					transaction.Rollback ();

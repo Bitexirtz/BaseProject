@@ -2,7 +2,7 @@
 using Itm.Database.Core.Services.ResponseTypes;
 using Microsoft.Extensions.Logging;
 
-namespace Itm.Database.Core.EF.Extensions
+namespace Itm.Database.Services.Extensions
 {
 	internal static class ResponseExtension
 	{

@@ -9,12 +9,12 @@ namespace Itm.Database.Core.Exception
 		{
 		}
 
-		public DatabaseException (String message)
+		public DatabaseException (string message)
 			: base (message)
 		{
 		}
 
-		public DatabaseException (String message, System.Exception innerException)
+		public DatabaseException (string message, System.Exception innerException)
 			: base (message, innerException)
 		{
 		}

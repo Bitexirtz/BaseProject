@@ -22,7 +22,7 @@ namespace Itm.Database.Entities
 
 		public string LastName { get; set; }
 
-		public int UserCredentiallID { get; set; }
+		public virtual int? UserCredentialID { get; set; }
 		public virtual UserCredential UserCredential { get; set; }
 
 		public DateTime? BirthDate { get; set; }

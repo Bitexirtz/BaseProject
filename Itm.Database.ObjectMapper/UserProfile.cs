@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Itm.Database.Entities;
 using Itm.Models;
+using Itm.Database.ObjectMapper.Extensions;
 
 namespace Itm.Database.ObjectMapper
 {
@@ -8,7 +9,7 @@ namespace Itm.Database.ObjectMapper
 	{
 		public UserProfile()
 		{
-			CreateMap<UserModel, User>();
+			CreateMap<UserModel, User> ();
 			CreateMap<UserModel, UserCredential>();
 
 			//CreateMap<UserModel, User> ()
@@ -20,6 +21,7 @@ namespace Itm.Database.ObjectMapper
 			//			 Password = src.Password
 			//		})
 			//	);
+
 
 			CreateMap<User, UserModel>()
 				.ForMember(

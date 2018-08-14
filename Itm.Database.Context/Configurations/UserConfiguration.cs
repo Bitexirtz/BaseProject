@@ -18,12 +18,17 @@ namespace Itm.Database.Context.Configurations
 				.HasDefaultValueSql("CURRENT_TIMESTAMP")
 				.IsRowVersion();
 
+
+			builder.HasOne (t => t.UserCredential).WithMany()
+					.HasForeignKey(t => t.UserCredentialID);
+
+
 			// One To One Relation
-			builder.HasOne(t => t.UserCredential)
-					.WithOne(t => t.User)
-					.HasForeignKey<UserCredential>(t => t.UserID);
-					//TODO: How to configure bidirectional navigation?
-					//.HasForeignKey<User>(t=>t.UserCredentiallID);
+			//builder.HasOne(t => t.UserCredential)
+			//		.WithOne(t => t.User)
+			//		.HasForeignKey<UserCredential>(t => t.UserID);
+			//TODO: How to configure bidirectional navigation?
+			//.HasForeignKey<User>(t=>t.UserCredentiallID);
 		}
 	}
 }

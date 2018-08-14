@@ -53,7 +53,7 @@ namespace Itm.Database.Console
 
 			var newUser = new UserModel
 			{
-				FirstName = "User-" + DateTime.Now.ToString(),
+				FirstName = "User-" + DateTime.Now.ToString (),
 				BirthDate = DateTime.Now,
 				LastName = "Last Name",
 				UserName = "Username",
@@ -61,12 +61,12 @@ namespace Itm.Database.Console
 			};
 
 
-			await repo.AddUserAsync(newUser);
+			await repo.AddUserAsync (newUser);
 
 			var updateUser = repo.GetUsersByIDAsync(1);
 			if(updateUser.Result.Model != null && updateUser.Result.DidError == false)
 			{
-				updateUser.Result.Model.FirstName = "Modified First Name";
+				updateUser.Result.Model.LastName = "Update-1";
 				await repo.UpdateUserAsync(updateUser.Result.Model);
 			}
 
