@@ -106,8 +106,6 @@ namespace Itm.Database.Services
 						throw new DatabaseException ("User record not found.");
 					}
 
-					DbContext.Entry (user).Reference (r => r.UserCredential).Load ();
-
 					//DO NOT USE: Will set User properties to NULL if property not exists in UserModel. Use instead: Mapper.Map(updates, user);
 					//user = Mapper.Map<User> (updates); 
 

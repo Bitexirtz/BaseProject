@@ -27,6 +27,8 @@ The architecture includes the following levels:
 | 4. | Create business logic | [Itm.Database.Services][4] | This is called by UI. Entities(DB) are mapped with Models(UI). |
 
 
+DO NOT USE: Will set User properties to NULL if property not exists in UserModel. Use instead: Mapper.Map(updates, user);
+
 [1]: Itm.Database.Entities/
 [2]: Itm.Database.Context/
 [3]: Itm.Database.Repositories/

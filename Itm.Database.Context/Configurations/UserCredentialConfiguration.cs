@@ -12,11 +12,6 @@ namespace Itm.Database.Context.Configurations
 			builder.HasKey (t => t.ID);
 			builder.HasIndex (t => t.ID);
 
-			//builder.HasOne (t => t.User)
-			//	.WithOne (t => t.UserCredential)
-			//	.HasForeignKey<User> (t => t.UserCredentiallID);
-
-
 			// Set concurrency token for entity
 			builder.Property (t => t.Timestamp)
 				.ValueGeneratedOnAddOrUpdate ()

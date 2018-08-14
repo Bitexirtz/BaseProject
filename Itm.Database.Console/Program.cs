@@ -60,7 +60,6 @@ namespace Itm.Database.Console
 				Password = "Password"
 			};
 
-
 			await repo.AddUserAsync (newUser);
 
 			var updateUser = repo.GetUsersByIDAsync(1);
