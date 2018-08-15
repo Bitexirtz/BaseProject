@@ -7,7 +7,7 @@ The architecture includes the following levels:
 3. Business Layer: Contains definitions and validations related to business
 4. Presentation Layer: Contains User Interfaces
 
-| Layer | Content | Has Interface | Prefix | Remarks |
+| Layer | Content | Has Interface | Suffix | Remarks |
  ----------- | ----------- | ----------- | ----------- | ----------- |
 | Entity Layer | DB Models | No | (none) | Properties are mapped to DB fields |
 | Data Layer | DB Context and | No | (none) |  |
