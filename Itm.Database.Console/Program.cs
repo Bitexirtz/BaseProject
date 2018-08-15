@@ -2,13 +2,12 @@
 using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Itm.Database.Context;
 using Itm.Database.Core.Entities;
 using Itm.Database.Core.Services;
+using Itm.Database.ObjectMapper;
 using Itm.Database.Services;
 using Itm.Models;
-using Itm.Database.ObjectMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Unity;
