@@ -18,18 +18,16 @@ The architecture includes the following levels:
 |  | View Models | No | ViewModel |  |
 |  | View | No | (none) |  |
 
-## Adding new tables
+## HowTo: Add new Database Table
 | No. | Content | Target Project | Remarks |
  ----------- | ----------- | ----------- | ----------- |
-| 1. | Add new class for the table | [Itm.Database.Entities][1] | Class name is mapped as table name and properties as field names. |
-| 2. | Configure table mappings | [Itm.Database.Context][2] | Can specifify primary key, rename fields, etc. |
-| 3. | Create a repository: class and interface | [Itm.Database.Repositories][3] |  |
-| 4. | Create business logic | [Itm.Database.Services][4] | This is called by UI. Entities(DB) are mapped with Models(UI). |
+| 1. | Add new class for the table | [Itm.Database.Entities](Itm.Database.Entities) | Class name is mapped as table name and properties as field names. |
+| 2. | Configure table mappings | [Itm.Database.Context](Itm.Database.Context) | Can specifify primary key, rename fields, etc. |
+| 3. | Create a repository: class and interface | [Itm.Database.Repositories](Itm.Database.Repositories) |  |
+| 4. | Create business logic | [Itm.Database.Services](Itm.Database.Services) | This is called by UI. Entities(DB) are mapped with Models(UI). |
 
+## HowTo: Add new Module
+(soon)
 
+## Tips
 DO NOT USE: Will set User properties to NULL if property not exists in UserModel. Use instead: Mapper.Map(updates, user);
-
-[1]: Itm.Database.Entities/
-[2]: Itm.Database.Context/
-[3]: Itm.Database.Repositories/
-[4]: Itm.Database.Services/

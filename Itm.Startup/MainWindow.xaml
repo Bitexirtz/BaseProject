@@ -4,9 +4,25 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Itm.Startup"
+		xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+		xmlns:region="clr-namespace:Itm.Definitions;assembly=Itm.Definitions"
+        Title="{Binding Title}"
+		Height="{x:Static SystemParameters.PrimaryScreenHeight}"
+		Width="{x:Static SystemParameters.PrimaryScreenWidth}"
+		>
+	<DockPanel LastChildFill="True">
+		<StackPanel  Orientation="Vertical"
+            prism:RegionManager.RegionName="MenuBarRegion" DockPanel.Dock="Left">
+			<ItemsControl>
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<Grid/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+			</ItemsControl>
+		</StackPanel >
+		<ContentControl prism:RegionManager.RegionName="{x:Static region:RegionNames.ContentRegion}" />
+	</DockPanel>
 </Window>
