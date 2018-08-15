@@ -26,6 +26,5 @@ namespace Itm.Models
 
 		public DateTime? BirthDate { get; set; }
 
-
 	}
 }

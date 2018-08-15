@@ -27,7 +27,15 @@ The architecture includes the following levels:
 | 4. | Create business logic | [Itm.Database.Services](Itm.Database.Services) | This is called by UI. Entities(DB) are mapped with Models(UI). |
 
 ## HowTo: Add new Module
-(soon)
+1. Create new WPF User Control Project
+2. Create a View and View Model for Main Content
+3. Create a View and View Model for Menu
+4. Create a class that implements IModule 
+5. Register the new module
+
+Packages:
+Prism.Wpf v6.3.0
+Prism.Unity v6.3.0
 
 ## Tips
 DO NOT USE: Will set User properties to NULL if property not exists in UserModel. Use instead: Mapper.Map(updates, user);
