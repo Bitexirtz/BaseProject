@@ -5,13 +5,20 @@ using Prism.Mvvm;
 using System.Collections.ObjectModel;
 using Itm.Models;
 using System;
+using Prism.Commands;
+using Prism.Regions;
+using Itm.Definitions;
 
 namespace Itm.Module.UserManagement.ViewModels
 {
 	public class UserManagementViewModel : BindableBase
 	{
+
 		IUserService _userService;
 		IEventAggregator _eventAggregator;
+		IRegionManager _regionManager;
+
+		public DelegateCommand OnNewUser { get; private set; }
 
 		private string _title;
 
@@ -29,25 +36,22 @@ namespace Itm.Module.UserManagement.ViewModels
 			set { SetProperty (ref _users, value); }
 		}
 
-		public UserManagementViewModel (IUserService userService, IEventAggregator eventAggregator)
+		public UserManagementViewModel (IUserService userService, IEventAggregator eventAggregator, IRegionManager regionManager)
 		{
+			_regionManager = regionManager;
 			_userService = userService;
 			_eventAggregator = eventAggregator;
-
-			var newUser = new UserModel
-			{
-				FirstName = "User-" + DateTime.Now.ToString (),
-				BirthDate = DateTime.Now,
-				LastName = "Last Name",
-				UserName = "Username",
-				Password = "Password"
-			};
-
-			_userService.AddUserAsync (newUser);
 
 			Users = new ObservableCollection<UserModel>(_userService.GetUsersAsync ().Result.Model.ToList ());
 
 			_title = "-User Management Title-";
+
+			OnNewUser = new DelegateCommand(CreateNewUser);
+		}
+
+		private void CreateNewUser()
+		{
+			_regionManager.RequestNavigate(RegionNames.ContentRegion, typeof(Views.UserRegistration).ToString());
 		}
 	}
 }

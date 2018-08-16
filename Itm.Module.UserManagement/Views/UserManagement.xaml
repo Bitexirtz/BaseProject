@@ -9,7 +9,8 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-		<StackPanel>
+        <Button Content="New User" Command="{Binding OnNewUser}" />
+        <StackPanel>
 			<TextBlock Text="{Binding Title}" />
 			<ListView ItemsSource="{Binding Users}">
 				<ListView.View>

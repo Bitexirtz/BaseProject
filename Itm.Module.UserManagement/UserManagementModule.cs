@@ -21,6 +21,7 @@ namespace Itm.Module.UserManagement
 		{
 			_regionManager.RegisterViewWithRegion (RegionNames.MenuBarRegion, () => _container.Resolve<Views.UserManagementMenu>());
 			_regionManager.RegisterViewWithRegion (RegionNames.ContentRegion, () => _container.Resolve <Views.UserManagement>());
+			_regionManager.RegisterViewWithRegion(RegionNames.ContentRegion, () => _container.Resolve<Views.UserRegistration>());
 		}
 	}
 }

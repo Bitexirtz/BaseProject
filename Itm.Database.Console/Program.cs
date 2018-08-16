@@ -53,7 +53,6 @@ namespace Itm.Database.Console
 			var newUser = new UserModel
 			{
 				FirstName = "User-" + DateTime.Now.ToString (),
-				BirthDate = DateTime.Now,
 				LastName = "Last Name",
 				UserName = "Username",
 				Password = "Password"
