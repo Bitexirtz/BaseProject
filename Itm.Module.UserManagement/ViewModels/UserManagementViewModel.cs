@@ -12,15 +12,16 @@ using System.Windows.Data;
 using System.Windows;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace Itm.Module.UserManagement.ViewModels
 {
 	public class UserManagementViewModel : BindableBase
 	{
-
 		IUserService _userService;
 		IEventAggregator _eventAggregator;
 		IRegionManager _regionManager;
+		public Task Initialization { get; private set; }
 
 		public DelegateCommand OnFirstCommand { get; private set; }
 		public DelegateCommand OnPreviousCommand { get; private set; }
@@ -28,7 +29,7 @@ namespace Itm.Module.UserManagement.ViewModels
 		public DelegateCommand OnLastCommand { get; private set; }
 		public DelegateCommand OnAddCommand { get; private set; }
 		public DelegateCommand OnUpdateCommand { get; private set; }
-		public DelegateCommand OnDeleteCommand { get; private set; }
+		public DelegateCommand<UserModel> OnDeleteCommand { get; private set; }
 		public DelegateCommand OnCancelCommand { get; private set; }
 
 		private string _title;
@@ -46,21 +47,14 @@ namespace Itm.Module.UserManagement.ViewModels
 			private set { SetProperty (ref _userListView, value); }
 		}
 
-		private IList<UserModel> _users;
-		public IList<UserModel> Users
-		{
-			get { return _users; }
-			set { SetProperty (ref _users, value); }
-		}
-
 		public UserManagementViewModel (IUserService userService, IEventAggregator eventAggregator, IRegionManager regionManager)
 		{
 			_regionManager = regionManager;
 			_userService = userService;
 			_eventAggregator = eventAggregator;
 
-			_userListView = CollectionViewSource.GetDefaultView (_userService.GetUsersAsync ().Result.Model.ToList ());
-	
+			Initialization = InitializeAsync();
+
 			_title = "-User Management Title-";
 
 			OnFirstCommand = new DelegateCommand (FirstCommandHandler);
@@ -69,8 +63,17 @@ namespace Itm.Module.UserManagement.ViewModels
 			OnLastCommand = new DelegateCommand (LastCommandHandler);
 			OnAddCommand = new DelegateCommand (AddCommandHandler);
 			OnUpdateCommand = new DelegateCommand (UpdateCommandHandler);
-			OnDeleteCommand = new DelegateCommand (DeleteCommandHandler);
+			OnDeleteCommand = new DelegateCommand<UserModel> (DeleteCommandHandler);
 			OnCancelCommand = new DelegateCommand (CancelCommandHandler);
+		}
+
+		private async Task InitializeAsync()
+		{
+			var result = await _userService.GetUsersAsync();
+			if(result.DidError == false)
+			{
+				UserListView = CollectionViewSource.GetDefaultView(result.Model.ToList());
+			}
 		}
 
 		private void LastCommandHandler ()
@@ -95,17 +98,6 @@ namespace Itm.Module.UserManagement.ViewModels
 
 		private void AddCommandHandler ()
 		{
-			//existingCustomerGrid.Visibility = Visibility.Collapsed;
-			//newOrderGrid.Visibility = Visibility.Collapsed;
-			//newCustomerGrid.Visibility = Visibility.Visible;
-
-			//// Clear all the text boxes before adding a new customer.  
-			//foreach (var child in newCustomerGrid.Children) {
-			//	var tb = child as TextBox;
-			//	if (tb != null) {
-			//		tb.Text = "";
-			//	}
-			//}
 		}
 
 		private void UpdateCommandHandler ()
@@ -113,12 +105,13 @@ namespace Itm.Module.UserManagement.ViewModels
 
 		}
 
-		private void DeleteCommandHandler ()
+		private async void DeleteCommandHandler(UserModel user)
 		{
-			var cur = _userListView.CurrentItem as UserModel;
-
-
-			_userListView.Refresh ();
+			if(user != null)
+			{
+				await _userService.RemoveUserAsync(user.ID);
+				await InitializeAsync();
+			}
 		}
 
 		private void CancelCommandHandler ()

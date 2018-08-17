@@ -19,9 +19,10 @@ namespace Itm.Database.Context.Configurations
 				.IsRowVersion();
 
 			// One To One Relation
-			builder.HasOne (t => t.UserCredential)
-					.WithOne (t => t.User)
-					.HasForeignKey<UserCredential> (t => t.UserID);
+			builder.HasOne(t => t.UserCredential)
+					.WithOne(t => t.User)
+					.HasForeignKey<UserCredential>(t => t.UserID)
+					.OnDelete(DeleteBehavior.Cascade);
 		}
 	}
 }

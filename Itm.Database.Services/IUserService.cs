@@ -14,5 +14,7 @@ namespace Itm.Database.Services
 		Task<ISingleResponse<UserModel>> UpdateUserAsync (UserModel updates);
 
 		Task<ISingleResponse<UserModel>> AddUserAsync (UserModel details);
+
+		Task<ISingleResponse<UserModel>> RemoveUserAsync(int userID);
 	}
 }

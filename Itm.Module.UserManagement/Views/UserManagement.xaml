@@ -2,119 +2,105 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Itm.Module.UserManagement.Views"
-             mc:Ignorable="d" 
-			 xmlns:prism="http://prismlibrary.com/"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
-			 xmlns:model="clr-namespace:Itm.Models;assembly=Itm.Models"
              d:DesignHeight="500" d:DesignWidth="400">
-	<UserControl.Resources>
-		<Style x:Key="Label" TargetType="{x:Type Label}" BasedOn="{x:Null}">
-			<Setter Property="HorizontalAlignment" Value="Left"/>
-			<Setter Property="VerticalAlignment" Value="Center"/>
-			<Setter Property="Margin" Value="3"/>
-			<Setter Property="Height" Value="23"/>
-		</Style>
-		<Style x:Key="UserTextBox" TargetType="{x:Type TextBox}" BasedOn="{x:Null}">
-			<Setter Property="HorizontalAlignment" Value="Right"/>
-			<Setter Property="VerticalAlignment" Value="Center"/>
-			<Setter Property="Margin" Value="3"/>
-			<Setter Property="Height" Value="26"/>
-			<Setter Property="Width" Value="150"/>
-		</Style>
+    <UserControl.Resources>
+        <Style x:Key="Label" TargetType="{x:Type Label}" BasedOn="{x:Null}">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Height" Value="23"/>
+        </Style>
+        <Style x:Key="UserTextBox" TargetType="{x:Type TextBox}" BasedOn="{x:Null}">
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Width" Value="150"/>
+        </Style>
 
-		<Style x:Key="NavButton" TargetType="{x:Type Button}" BasedOn="{x:Null}">
-			<Setter Property="FontSize" Value="24"/>
-			<Setter Property="FontFamily" Value="Segoe UI Symbol"/>
-			<Setter Property="Margin" Value="2,2,2,0"/>
-			<Setter Property="Width" Value="40"/>
-			<Setter Property="Height" Value="auto"/>
-		</Style>
+        <Style x:Key="NavButton" TargetType="{x:Type Button}" BasedOn="{x:Null}">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+            <Setter Property="Margin" Value="2,2,2,0"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="auto"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-		<RoutedUICommand x:Key="FirstCommand" Text="First"/>
-		<RoutedUICommand x:Key="LastCommand" Text="Last"/>
-		<RoutedUICommand x:Key="NextCommand" Text="Next"/>
-		<RoutedUICommand x:Key="PreviousCommand" Text="Previous"/>
-		<RoutedUICommand x:Key="DeleteCustomerCommand" Text="Delete Customer"/>
-		<RoutedUICommand x:Key="DeleteOrderCommand" Text="Delete Order"/>
-		<RoutedUICommand x:Key="UpdateCommand" Text="Update"/>
-		<RoutedUICommand x:Key="AddCommand" Text="Add"/>
-		<RoutedUICommand x:Key="CancelCommand" Text="Cancel"/>
+        <StackPanel Orientation="Horizontal" Margin="2,2,2,0" Height="36" VerticalAlignment="Top" Background="Gainsboro">
+            <Button Content="|◄" Command="{Binding OnFirstCommand}" Style="{StaticResource NavButton}"/>
+            <Button Content="◄" Command="{Binding OnPreviousCommand}" Style="{StaticResource NavButton}"/>
+            <Button Content="►" Command="{Binding OnNextCommand}" Style="{StaticResource NavButton}"/>
+            <Button Content="►|" Command="{Binding OnLastCommand}" Style="{StaticResource NavButton}"/>
+            <Button Content="Delete User" Command="{Binding OnDeleteCommand}" CommandParameter="{Binding ElementName=UsersDataGrid, Path=SelectedItem}" FontSize="11" Width="120" Style="{StaticResource NavButton}"/>
+            <Button Content="New User" Command="{Binding OnAddCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>
+            <Button Content="Commit" Command="{Binding OnUpdateCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>
+            <Button Content="Cancel" Command="{Binding OnCancelCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>
+        </StackPanel>
 
-	</UserControl.Resources>
+        <Grid x:Name="existingCustomerGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5" Visibility="Visible" VerticalAlignment="Top" Background="AntiqueWhite" DataContext="{Binding UserListView}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="250"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="auto"/>
-			<RowDefinition Height="auto"/>
-			<RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
+            <Label Content="User ID:" Grid.Row="0" Style="{StaticResource Label}"/>
+            <TextBox x:Name="UserIDTextBox" Grid.Row="0" Style="{StaticResource UserTextBox}"
+                  Text="{Binding ElementName=UsersDataGrid, Path=SelectedItem.ID, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
 
-		<StackPanel Orientation="Horizontal" Margin="2,2,2,0" Height="36" VerticalAlignment="Top" Background="Gainsboro" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin">
-			<Button Content="|◄" Command="{Binding OnFirstCommand}" Style="{StaticResource NavButton}"/>
-			<Button Content="◄" Command="{Binding OnPreviousCommand}" Style="{StaticResource NavButton}"/>
-			<Button Content="►" Command="{Binding OnNextCommand}" Style="{StaticResource NavButton}"/>
-			<Button Content="►|" Command="{Binding OnLastCommand}" Style="{StaticResource NavButton}"/>
-			<Button Content="Delete User" Command="{Binding OnDeleteCommand}" FontSize="11" Width="120" Style="{StaticResource NavButton}"/>
-			<Button Content="New User" Command="{Binding OnAddCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>
-			<Button Content="Commit" Command="{Binding OnUpdateCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>
-			<Button Content="Cancel" Command="{Binding OnCancelCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>
-		</StackPanel>
+            <Label Content="First Name:" Grid.Row="1" Style="{StaticResource Label}"/>
+            <TextBox x:Name="FirstNameTextBox" Grid.Row="1" Style="{StaticResource UserTextBox}"
+                  Text="{Binding ElementName=UsersDataGrid, Path=SelectedItem.FirstName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
 
-		<Grid x:Name="existingCustomerGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5" Visibility="Visible" VerticalAlignment="Top" Background="AntiqueWhite" DataContext="{Binding UserListView}">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto" MinWidth="250"/>
-			</Grid.ColumnDefinitions>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-			</Grid.RowDefinitions>
+            <Label Content="Middle Name:" Grid.Row="2" Style="{StaticResource Label}"/>
+            <TextBox x:Name="MiddleNameTextBox" Grid.Row="2" Style="{StaticResource UserTextBox}"
+                  Text="{Binding ElementName=UsersDataGrid, Path=SelectedItem.MiddleName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
 
-			<Label Content="User ID:" Grid.Row="0" Style="{StaticResource Label}"/>
-			<TextBox x:Name="UserIDTextBox" Grid.Row="0" Style="{StaticResource UserTextBox}"
-                  Text="{Binding ID, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-			
-			<Label Content="First Name:" Grid.Row="1" Style="{StaticResource Label}"/>
-			<TextBox x:Name="FirstNameTextBox" Grid.Row="1" Style="{StaticResource UserTextBox}"
-                  Text="{Binding FirstName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+            <Label Content="Last Name:" Grid.Row="3" Style="{StaticResource Label}"/>
+            <TextBox x:Name="LastNameTextBox" Grid.Row="3" Style="{StaticResource UserTextBox}"
+                  Text="{Binding ElementName=UsersDataGrid, Path=SelectedItem.LastName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
 
-			<Label Content="Middle Name:" Grid.Row="2" Style="{StaticResource Label}"/>
-			<TextBox x:Name="MiddleNameTextBox" Grid.Row="2" Style="{StaticResource UserTextBox}"
-                  Text="{Binding MiddleName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+            <Label Content="Username:" Grid.Row="4" Style="{StaticResource Label}"/>
+            <TextBox x:Name="UsernameTextBox" Grid.Row="4" Style="{StaticResource UserTextBox}"
+                  Text="{Binding ElementName=UsersDataGrid, Path=SelectedItem.UserName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
 
-			<Label Content="Last Name:" Grid.Row="3" Style="{StaticResource Label}"/>
-			<TextBox x:Name="LastNameTextBox" Grid.Row="3" Style="{StaticResource UserTextBox}"
-                  Text="{Binding LastName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+            <Label Content="Password:" Grid.Row="5" Style="{StaticResource Label}"/>
+            <TextBox x:Name="PasswordTextBox" Grid.Row="5" Style="{StaticResource UserTextBox}"
+                  Text="{Binding ElementName=UsersDataGrid, Path=SelectedItem.Password, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+        </Grid>
 
-			<Label Content="Username:" Grid.Row="4" Style="{StaticResource Label}"/>
-			<TextBox x:Name="UsernameTextBox" Grid.Row="4" Style="{StaticResource UserTextBox}"
-                  Text="{Binding UserName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-
-			<Label Content="Password:" Grid.Row="5" Style="{StaticResource Label}"/>
-			<TextBox x:Name="PasswordTextBox" Grid.Row="5" Style="{StaticResource UserTextBox}"
-                  Text="{Binding Password, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-		</Grid>
-
-		<DataGrid x:Name="ordersDataGrid" SelectionUnit="Cell" SelectionMode="Single" AutoGenerateColumns="False" CanUserAddRows="false" IsEnabled="True" EnableRowVirtualization="True" Width="auto" ItemsSource="{Binding UserListView}" Margin="10,10,10,10" Grid.Row="2" RowDetailsVisibilityMode="VisibleWhenSelected">
-				<DataGrid.Columns>
-				<DataGridTemplateColumn>
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<Button Content="Delete" Command="{Binding OnDeleteCommand}" CommandParameter="{Binding}"/>
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
-				<DataGridTextColumn x:Name="UserIDColumn" Binding="{Binding ID}" Header="ID" Width="SizeToHeader"/>
-				<DataGridTextColumn x:Name="FirstNameColumn" Binding="{Binding FirstName}" Header="First Name" Width="SizeToHeader"/>
-				<DataGridTextColumn x:Name="MiddleNameColumn" Binding="{Binding MiddleName}" Header="Middle Name" Width="SizeToHeader"/>
-				<DataGridTextColumn x:Name="LastNameColumn" Binding="{Binding LastName}" Header="Last Name" Width="SizeToHeader"/>
-				<DataGridTextColumn x:Name="PasswordColumn" Binding="{Binding Password}" Header="Password" Width="SizeToHeader"/>
-			</DataGrid.Columns>
-		</DataGrid>
-	</Grid>
+        <DataGrid x:Name="UsersDataGrid" SelectionUnit="FullRow" SelectionMode="Single"  AutoGenerateColumns="False" CanUserAddRows="false" IsEnabled="True" EnableRowVirtualization="True" Width="auto" ItemsSource="{Binding UserListView}" Margin="10,10,10,10" Grid.Row="2" RowDetailsVisibilityMode="VisibleWhenSelected">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Delete" Command="{Binding Path=DataContext.OnDeleteCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn x:Name="UserIDColumn" Binding="{Binding ID}" Header="ID" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="FirstNameColumn" Binding="{Binding FirstName}" Header="First Name" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="MiddleNameColumn" Binding="{Binding MiddleName}" Header="Middle Name" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="LastNameColumn" Binding="{Binding LastName}" Header="Last Name" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="PasswordColumn" Binding="{Binding Password}" Header="Password" Width="SizeToHeader"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
 </UserControl>

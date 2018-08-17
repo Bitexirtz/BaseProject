@@ -29,9 +29,6 @@ namespace Itm.Database.Services
 			var response = new ListResponse<UserModel> ();
 
 			try {
-
-				/*response.Model =*/// await UserRepository.GetAll (pageSize, pageNumber).ToListAsync ();
-
 				response.Model = await UserRepository.GetAll (pageSize, pageNumber).Select (o => Mapper.Map<UserModel> (o)).ToListAsync ();
 			}
 			catch (Exception ex) {
@@ -121,6 +118,34 @@ namespace Itm.Database.Services
 					transaction.Rollback ();
 					response.SetError (ex, Logger);
 				}
+			}
+
+			return response;
+		}
+
+		public async Task<ISingleResponse<UserModel>> RemoveUserAsync(int userID)
+		{
+			Logger?.LogInformation(CreateInvokedMethodLog(MethodBase.GetCurrentMethod().ReflectedType.FullName));
+
+			var response = new SingleResponse<UserModel>();
+
+			try
+			{
+				// Retrieve user by id
+				User user = await UserRepository.GetByIDAsync(userID);
+				if (user == null)
+				{
+					throw new DatabaseException("User record not found.");
+				}
+
+				//await UserCredentialRepository.DeleteAsync(user.UserCredential);
+
+				await UserRepository.DeleteAsync(user);
+				response.Model = Mapper.Map<UserModel>(user);
+			}
+			catch (Exception ex)
+			{
+				response.SetError(ex, Logger);
 			}
 
 			return response;
