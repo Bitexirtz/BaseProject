@@ -8,11 +8,6 @@ namespace Itm.Models
 		{
 		}
 
-		public UserModel(int userID)
-		{
-			ID = userID;
-		}
-
 		public int ID { get; set; }
 
 		public string FirstName { get; set; }
