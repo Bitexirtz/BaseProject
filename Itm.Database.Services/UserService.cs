@@ -4,11 +4,12 @@ using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
 using Itm.Database.Context;
-using Itm.Database.Services.Extensions;
-using Itm.Database.Core.Exception;
 using Itm.Database.Core.Entities;
+using Itm.Database.Core.Exception;
 using Itm.Database.Core.Services.ResponseTypes;
 using Itm.Database.Entities;
+using Itm.Database.Repositories;
+using Itm.Database.Services.Extensions;
 using Itm.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -17,9 +18,14 @@ namespace Itm.Database.Services
 {
 	public class UserService : BaseService, IUserService
 	{
+		protected IUserRepository _userRepository;
+		protected IUserCredentialRepository _userCredentialRepository;
+
 		public UserService (ILogger logger, IMapper mapper, IAppUser userInfo, AppDbContext dbContext)
 			: base (logger, mapper, userInfo, dbContext)
 		{
+			_userCredentialRepository = new UserCredentialRepository(UserInfo, this.DbContext);
+			_userRepository = new UserRepository(UserInfo, this.DbContext));
 		}
 
 		public async Task<IListResponse<UserModel>> GetUsersAsync (int pageSize = 0, int pageNumber = 0)
@@ -29,7 +35,7 @@ namespace Itm.Database.Services
 			var response = new ListResponse<UserModel> ();
 
 			try {
-				response.Model = await UserRepository.GetAll (pageSize, pageNumber).Select (o => Mapper.Map<UserModel> (o)).ToListAsync ();
+				response.Model = await _userRepository.GetAll (pageSize, pageNumber).Select (o => Mapper.Map<UserModel> (o)).ToListAsync ();
 			}
 			catch (Exception ex) {
 				response.SetError (ex, Logger);
@@ -45,7 +51,7 @@ namespace Itm.Database.Services
 			var response = new SingleResponse<UserModel> ();
 
 			try {
-				var userDetails = await UserRepository.GetByIDAsync(userID);
+				var userDetails = await _userRepository.GetByIDAsync(userID);
 
 				if(userDetails != null)
 				{
@@ -71,11 +77,11 @@ namespace Itm.Database.Services
 				try {
 
 					var user = Mapper.Map<User>(details);
-					await UserRepository.AddAsync(user);
+					await _userRepository.AddAsync(user);
 
 					var userCredential = Mapper.Map<UserCredential>(details);
 					userCredential.User = user;
-					await UserCredentialRepository.AddAsync(userCredential);
+					await _userCredentialRepository.AddAsync(userCredential);
 
 					transaction.Commit ();
 					response.Model = Mapper.Map<UserModel> (user);
@@ -98,7 +104,7 @@ namespace Itm.Database.Services
 			using (var transaction = DbContext.Database.BeginTransaction ()) {
 				try {
 
-					User user = await UserRepository.GetByIDAsync (updates.ID);
+					User user = await _userRepository.GetByIDAsync (updates.ID);
 					if(user == null) {
 						throw new DatabaseException ("User record not found.");
 					}
@@ -109,7 +115,7 @@ namespace Itm.Database.Services
 					Mapper.Map(updates, user);
 					//Mapper.Map<UserCredential> (updates);
 
-					await UserRepository.UpdateAsync (user);
+					await _userRepository.UpdateAsync (user);
 
 					transaction.Commit ();
 					response.Model = Mapper.Map<UserModel>(user);
@@ -132,7 +138,7 @@ namespace Itm.Database.Services
 			try
 			{
 				// Retrieve user by id
-				User user = await UserRepository.GetByIDAsync(userID);
+				User user = await _userRepository.GetByIDAsync(userID);
 				if (user == null)
 				{
 					throw new DatabaseException("User record not found.");
@@ -140,7 +146,7 @@ namespace Itm.Database.Services
 
 				//await UserCredentialRepository.DeleteAsync(user.UserCredential);
 
-				await UserRepository.DeleteAsync(user);
+				await _userRepository.DeleteAsync(user);
 				response.Model = Mapper.Map<UserModel>(user);
 			}
 			catch (Exception ex)

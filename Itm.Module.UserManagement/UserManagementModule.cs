@@ -11,10 +11,10 @@ namespace Itm.Module.UserManagement
 		private IRegionManager _regionManager;
 		private IUnityContainer _container;
 
-		public UserManagementModule (IUnityContainer container, IRegionManager regionManager)
+		public UserManagementModule (IUnityContainer container)
 		{
 			_container = container;
-			_regionManager = regionManager;
+			_regionManager = container.Resolve<IRegionManager>();
 		}
 
 		public void Initialize ()

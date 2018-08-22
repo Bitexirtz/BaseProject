@@ -132,6 +132,10 @@
       <Project>{EED453AD-9272-48F2-8616-EA2545792D9F}</Project>
       <Name>Itm.Database.Services</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Itm.DataValidation\Itm.DataValidation.csproj">
+      <Project>{4AC020D8-9AE4-4053-BAA6-F6B40A57A422}</Project>
+      <Name>Itm.DataValidation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Itm.Definitions\Itm.Definitions.csproj">
       <Project>{E40462FB-6D4D-4B4F-8911-2B8CFE7F6528}</Project>
       <Name>Itm.Definitions</Name>

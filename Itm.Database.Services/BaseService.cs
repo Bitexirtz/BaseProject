@@ -15,9 +15,6 @@ namespace Itm.Database.Services
 		protected bool Disposed;
 		protected readonly AppDbContext DbContext;
 
-		protected IUserRepository m_userRepository;
-		protected IUserCredentialRepository m_userCredentialRepository;
-
 		public BaseService(ILogger logger, IMapper mapper, IAppUser userInfo, AppDbContext dbContext)
 		{
 			Logger = logger;
@@ -40,9 +37,5 @@ namespace Itm.Database.Services
 		{
 			return string.Format("{0} has been invoked", methodName);
 		}
-
-		protected IUserRepository UserRepository => m_userRepository ?? (m_userRepository = new UserRepository(UserInfo, this.DbContext));
-
-		protected IUserCredentialRepository UserCredentialRepository => m_userCredentialRepository ?? (m_userCredentialRepository = new UserCredentialRepository (UserInfo, this.DbContext));
 	}
 }
