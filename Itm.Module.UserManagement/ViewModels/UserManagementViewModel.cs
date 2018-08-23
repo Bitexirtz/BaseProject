@@ -84,7 +84,7 @@ namespace Itm.Module.UserManagement.ViewModels
 			OnLastCommand = new DelegateCommand (LastCommandHandler);
 			OnAddCommand = new DelegateCommand (AddCommandHandler);
 			//OnSaveCommand = new DelegateCommand (SaveCommandHandler, CanSaveNewUser);
-			OnSaveCommand = new DelegateCommand(SaveCommandHandler, () => !NewUserModel.HasErrors);
+			OnSaveCommand = new DelegateCommand(SaveCommandHandler);
 			OnDeleteCommand = new DelegateCommand<UserModel> (DeleteCommandHandler);
 			OnCancelCommand = new DelegateCommand (CancelCommandHandler);
 

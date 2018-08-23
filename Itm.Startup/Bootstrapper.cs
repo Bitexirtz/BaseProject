@@ -7,7 +7,7 @@ using Itm.Database.Services;
 using Itm.Module.UserManagement;
 using Itm.RegionAdapters;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using NLog;
 using Microsoft.Practices.Unity;
 using Prism.Modularity;
 using Prism.Regions;
@@ -57,6 +57,7 @@ namespace Itm.Startup
 			Container.RegisterType<ObjectMapperProvider> (new TransientLifetimeManager ());
 			Container.RegisterInstance (Container.Resolve<ObjectMapperProvider> ().Mapper);
 			Container.RegisterType<IAppUser, AppUser> (new InjectionConstructor (1, "LoggedUser"));
+			Container.RegisterType<ILogger> (new InjectionFactory (l => LogManager.GetCurrentClassLogger ()));
 			Container.RegisterType<ILogger> (new InjectionFactory ((c) => null));
 			Container.RegisterType<IUserService, UserService> ();
 		}

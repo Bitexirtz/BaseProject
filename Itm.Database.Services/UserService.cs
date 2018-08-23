@@ -12,7 +12,7 @@ using Itm.Database.Repositories;
 using Itm.Database.Services.Extensions;
 using Itm.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using NLog;
 
 namespace Itm.Database.Services
 {
@@ -25,12 +25,12 @@ namespace Itm.Database.Services
 			: base (logger, mapper, userInfo, dbContext)
 		{
 			_userCredentialRepository = new UserCredentialRepository(UserInfo, this.DbContext);
-			_userRepository = new UserRepository(UserInfo, this.DbContext));
+			_userRepository = new UserRepository(UserInfo, this.DbContext);
 		}
 
 		public async Task<IListResponse<UserModel>> GetUsersAsync (int pageSize = 0, int pageNumber = 0)
 		{
-			Logger?.LogInformation (CreateInvokedMethodLog (MethodBase.GetCurrentMethod ().ReflectedType.FullName));
+			Logger.Info (CreateInvokedMethodLog (MethodBase.GetCurrentMethod ().ReflectedType.FullName));
 
 			var response = new ListResponse<UserModel> ();
 
@@ -46,7 +46,7 @@ namespace Itm.Database.Services
 
 		public async Task<ISingleResponse<UserModel>> GetUsersByIDAsync (int userID)
 		{
-			Logger?.LogInformation (CreateInvokedMethodLog (MethodBase.GetCurrentMethod ().ReflectedType.FullName));
+			Logger.Info (CreateInvokedMethodLog (MethodBase.GetCurrentMethod ().ReflectedType.FullName));
 
 			var response = new SingleResponse<UserModel> ();
 
@@ -97,7 +97,7 @@ namespace Itm.Database.Services
 
 		public async Task<ISingleResponse<UserModel>> UpdateUserAsync (UserModel updates)
 		{
-			Logger?.LogInformation (CreateInvokedMethodLog (MethodBase.GetCurrentMethod ().ReflectedType.FullName));
+			Logger.Info (CreateInvokedMethodLog (MethodBase.GetCurrentMethod ().ReflectedType.FullName));
 
 			var response = new SingleResponse<UserModel> ();
 
@@ -131,7 +131,7 @@ namespace Itm.Database.Services
 
 		public async Task<ISingleResponse<UserModel>> RemoveUserAsync(int userID)
 		{
-			Logger?.LogInformation(CreateInvokedMethodLog(MethodBase.GetCurrentMethod().ReflectedType.FullName));
+			Logger.Info(CreateInvokedMethodLog(MethodBase.GetCurrentMethod().ReflectedType.FullName));
 
 			var response = new SingleResponse<UserModel>();
 
