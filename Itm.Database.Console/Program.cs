@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Configuration;
-using System.Linq;
 using System.Threading.Tasks;
 using Itm.Database.Context;
 using Itm.Database.Core.Entities;
 using Itm.Database.Core.Services;
 using Itm.Database.ObjectMapper;
 using Itm.Database.Services;
+using Itm.Log;
 using Itm.Models;
 using Microsoft.EntityFrameworkCore;
-using NLog;
 using Unity;
 using Unity.Injection;
 using Unity.Lifetime;
@@ -21,6 +20,7 @@ namespace Itm.Database.Console
 		static void Main(string[] args)
 		{
 			IUnityContainer container = new UnityContainer();
+			Logger _logger = new Logger ("Internal.log");
 
 			var dbConnection = ConfigurationManager.ConnectionStrings["AppDbConnection"].ConnectionString;
 			container.RegisterType<IDatabaseConnection, DefaultDatabaseConnection>(new InjectionConstructor(dbConnection));
@@ -39,7 +39,7 @@ namespace Itm.Database.Console
 			container.RegisterInstance(container.Resolve<ObjectMapperProvider>().Mapper);
 
 			container.RegisterType<IAppUser, AppUser>(new InjectionConstructor(1, "LoggedUser"));
-			container.RegisterType<ILogger> (new InjectionFactory (l => LogManager.GetCurrentClassLogger ()));
+			container.RegisterInstance (_logger);
 			container.RegisterType<IUserService, UserService>();
 			IAppUser user = container.Resolve<IAppUser>();
 

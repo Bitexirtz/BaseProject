@@ -92,10 +92,6 @@
     <Reference Include="Microsoft.Extensions.Primitives, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Primitives.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.5.8\lib\net45\NLog.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Remotion.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\packages\Remotion.Linq.2.2.0\lib\net45\Remotion.Linq.dll</HintPath>
     </Reference>
@@ -191,12 +187,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="NLog.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -219,6 +209,10 @@
     <ProjectReference Include="..\Itm.Database.Services\Itm.Database.Services.csproj">
       <Project>{EED453AD-9272-48F2-8616-EA2545792D9F}</Project>
       <Name>Itm.Database.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Itm.Log\Itm.Log.csproj">
+      <Project>{f2cce3ed-136a-4e3f-9db2-b09faa91d22e}</Project>
+      <Name>Itm.Log</Name>
     </ProjectReference>
     <ProjectReference Include="..\Itm.Models\Itm.Models.csproj">
       <Project>{4267178D-85C9-4918-9CB0-C7D8E32B66B5}</Project>

@@ -54,10 +54,6 @@
     <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
     </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.5.8\lib\net45\NLog.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Prism, Version=6.3.0.0, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.6.3.0\lib\net45\Prism.dll</HintPath>
     </Reference>
@@ -225,12 +221,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="NLog.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -265,6 +255,10 @@
     <ProjectReference Include="..\Itm.Definitions\Itm.Definitions.csproj">
       <Project>{e40462fb-6d4d-4b4f-8911-2b8cfe7f6528}</Project>
       <Name>Itm.Definitions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Itm.Log\Itm.Log.csproj">
+      <Project>{f2cce3ed-136a-4e3f-9db2-b09faa91d22e}</Project>
+      <Name>Itm.Log</Name>
     </ProjectReference>
     <ProjectReference Include="..\Itm.Module.UserManagement\Itm.Module.UserManagement.csproj">
       <Project>{68DF6E30-9D68-4D30-B89A-D8C64FB981A7}</Project>

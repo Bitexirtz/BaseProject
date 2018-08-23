@@ -1,6 +1,6 @@
 ﻿using Itm.Database.Core.Exception;
 using Itm.Database.Core.Services.ResponseTypes;
-using NLog;
+using Itm.Log;
 
 namespace Itm.Database.Services.Extensions
 {

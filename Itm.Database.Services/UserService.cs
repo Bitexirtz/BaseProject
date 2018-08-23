@@ -10,9 +10,9 @@ using Itm.Database.Core.Services.ResponseTypes;
 using Itm.Database.Entities;
 using Itm.Database.Repositories;
 using Itm.Database.Services.Extensions;
+using Itm.Log;
 using Itm.Models;
 using Microsoft.EntityFrameworkCore;
-using NLog;
 
 namespace Itm.Database.Services
 {
