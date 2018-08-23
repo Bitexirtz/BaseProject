@@ -20,7 +20,7 @@ namespace Itm.Database.Console
 		static void Main(string[] args)
 		{
 			IUnityContainer container = new UnityContainer();
-			Logger _logger = new Logger ("Internal.log");
+			//Logger _logger = new Logger ("Internal.log");
 
 			var dbConnection = ConfigurationManager.ConnectionStrings["AppDbConnection"].ConnectionString;
 			container.RegisterType<IDatabaseConnection, DefaultDatabaseConnection>(new InjectionConstructor(dbConnection));
@@ -33,13 +33,14 @@ namespace Itm.Database.Console
 			var options = new DbContextOptionsBuilder<AppDbContext>().UseSqlite("Data Source=AppData.db;").Options;
 			#endregion SQLite
 
+			container.RegisterType<ILogger, Logger> (new InjectionConstructor ());
 			container.RegisterType<AppDbContext>(new TransientLifetimeManager(), new InjectionConstructor(options));
 
 			container.RegisterType<ObjectMapperProvider>(new TransientLifetimeManager());
 			container.RegisterInstance(container.Resolve<ObjectMapperProvider>().Mapper);
 
 			container.RegisterType<IAppUser, AppUser>(new InjectionConstructor(1, "LoggedUser"));
-			container.RegisterInstance (_logger);
+			
 			container.RegisterType<IUserService, UserService>();
 			IAppUser user = container.Resolve<IAppUser>();
 

@@ -71,6 +71,7 @@ namespace Itm.Database.Services
 
 		public async Task<ISingleResponse<UserModel>> AddUserAsync (UserModel details)
 		{
+			Logger.Info (CreateInvokedMethodLog (MethodBase.GetCurrentMethod ().ReflectedType.FullName));
 			var response = new SingleResponse<UserModel> ();
 
 			using (var transaction = DbContext.Database.BeginTransaction ()) {
