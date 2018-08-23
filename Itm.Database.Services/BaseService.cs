@@ -2,7 +2,7 @@
 using Itm.Database.Context;
 using Itm.Database.Core.Entities;
 using Itm.Database.Core.Services;
-using Itm.Log;
+using Itm.Log.Core;
 
 namespace Itm.Database.Services
 {

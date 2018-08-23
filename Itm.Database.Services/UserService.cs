@@ -11,6 +11,7 @@ using Itm.Database.Entities;
 using Itm.Database.Repositories;
 using Itm.Database.Services.Extensions;
 using Itm.Log;
+using Itm.Log.Core;
 using Itm.Models;
 using Microsoft.EntityFrameworkCore;
 

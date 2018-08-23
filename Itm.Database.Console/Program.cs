@@ -7,6 +7,7 @@ using Itm.Database.Core.Services;
 using Itm.Database.ObjectMapper;
 using Itm.Database.Services;
 using Itm.Log;
+using Itm.Log.Core;
 using Itm.Models;
 using Microsoft.EntityFrameworkCore;
 using Unity;
@@ -35,10 +36,8 @@ namespace Itm.Database.Console
 
 			container.RegisterType<ILogger, Logger> (new InjectionConstructor ());
 			container.RegisterType<AppDbContext>(new TransientLifetimeManager(), new InjectionConstructor(options));
-
 			container.RegisterType<ObjectMapperProvider>(new TransientLifetimeManager());
 			container.RegisterInstance(container.Resolve<ObjectMapperProvider>().Mapper);
-
 			container.RegisterType<IAppUser, AppUser>(new InjectionConstructor(1, "LoggedUser"));
 			
 			container.RegisterType<IUserService, UserService>();
