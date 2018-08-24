@@ -31,6 +31,16 @@ namespace Itm.Database.Repositories
 
 				if (!cast.CreationDateTime.HasValue)
 					cast.CreationDateTime = DateTime.Now;
+
+				if(string.IsNullOrEmpty(cast.CreationIPv4) == true) {
+					var host = Dns.GetHostEntry (Dns.GetHostName ());
+					cast.CreationIPv4 = host.AddressList.FirstOrDefault (ip => ip.AddressFamily == AddressFamily.InterNetwork)?.ToString ();
+				}
+
+				if (string.IsNullOrEmpty (cast.CreationHostName) == true) {
+					cast.CreationHostName = System.Environment.MachineName;
+				}
+
 			}
 
 			DbContext.Set<TEntity> ().Add (entity);

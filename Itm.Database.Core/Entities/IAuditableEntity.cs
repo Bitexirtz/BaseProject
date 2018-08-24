@@ -7,6 +7,9 @@ namespace Itm.Database.Core.Entities
 		string CreationUser { get; set; }
 
 		DateTime? CreationDateTime { get; set; }
+		string CreationIPv4 { get; set; }
+
+		string CreationHostName { get; set; }
 
 		string LastUpdateUser { get; set; }
 

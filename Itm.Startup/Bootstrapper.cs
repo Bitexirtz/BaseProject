@@ -1,12 +1,13 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using AutoMapper;
 using Itm.Database.Context;
 using Itm.Database.Core.Entities;
-using Itm.Database.ObjectMapper;
 using Itm.Database.Services;
 using Itm.Log;
 using Itm.Log.Core;
 using Itm.Module.UserManagement;
+using Itm.ObjectMap;
 using Itm.RegionAdapters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Practices.Unity;
@@ -64,8 +65,7 @@ namespace Itm.Startup
 
 			Container.RegisterType<AppDbContext>(new TransientLifetimeManager(), new InjectionConstructor(options));
 			Container.RegisterType<ILogger, Logger>(new InjectionConstructor());
-			Container.RegisterType<ObjectMapperProvider>(new TransientLifetimeManager());
-			Container.RegisterInstance(Container.Resolve<ObjectMapperProvider>().Mapper);
+			Container.RegisterType<IMapper, ObjectMapper> ();
 			Container.RegisterType<IAppUser, AppUser>(new InjectionConstructor(1, "LoggedUser"));
 			Container.RegisterType<IUserService, UserService>();
 		}

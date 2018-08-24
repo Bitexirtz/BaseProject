@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using AutoMapper;
-using System.Reflection;
 
-namespace Itm.Database.ObjectMapper.Extensions
+namespace Itm.ObjectMap.Extensions
 {
 	internal static class MappingExpressionExtension
 	{

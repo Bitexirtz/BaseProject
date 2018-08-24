@@ -244,10 +244,6 @@
       <Project>{B81ADCEF-3844-4AB1-BDA2-DDE4E01E3C01}</Project>
       <Name>Itm.Database.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Itm.Database.ObjectMapper\Itm.Database.ObjectMapper.csproj">
-      <Project>{048FB41D-0043-4EA3-814B-682951586D2A}</Project>
-      <Name>Itm.Database.ObjectMapper</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Itm.Database.Services\Itm.Database.Services.csproj">
       <Project>{EED453AD-9272-48F2-8616-EA2545792D9F}</Project>
       <Name>Itm.Database.Services</Name>
@@ -267,6 +263,10 @@
     <ProjectReference Include="..\Itm.Module.UserManagement\Itm.Module.UserManagement.csproj">
       <Project>{68DF6E30-9D68-4D30-B89A-D8C64FB981A7}</Project>
       <Name>Itm.Module.UserManagement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Itm.ObjectMap\Itm.ObjectMap.csproj">
+      <Project>{048FB41D-0043-4EA3-814B-682951586D2A}</Project>
+      <Name>Itm.ObjectMap</Name>
     </ProjectReference>
     <ProjectReference Include="..\Itm.RegionAdapters\Itm.RegionAdapters.csproj">
       <Project>{6BC3B760-C6CD-4D22-968B-D0E93AF9CB38}</Project>

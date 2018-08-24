@@ -24,6 +24,10 @@ namespace Itm.Database.Entities
 
 		public string CreationUser { get; set; }
 
+		public string CreationIPv4 { get; set; }
+
+		public string CreationHostName { get; set; }
+
 		public DateTime? CreationDateTime { get; set; }
 
 		public string LastUpdateUser { get; set; }

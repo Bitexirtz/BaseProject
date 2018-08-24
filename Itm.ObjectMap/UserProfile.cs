@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using Itm.Database.Entities;
 using Itm.Models;
-using Itm.Database.ObjectMapper.Extensions;
 
-namespace Itm.Database.ObjectMapper
+namespace Itm.ObjectMap
 {
 	public class UserProfile : Profile
 	{
