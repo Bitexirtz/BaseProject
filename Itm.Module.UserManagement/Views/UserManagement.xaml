@@ -114,7 +114,7 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <Grid x:Name="NewUserGrid" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" DataContext="{Binding NewUserModel}" Background="CornflowerBlue">
+        <Grid x:Name="NewUserGrid" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" Background="CornflowerBlue">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" MinWidth="250"/>
                 <ColumnDefinition Width="Auto" MinWidth="50"/>
@@ -141,23 +141,23 @@
             <TextBlock Text="New User Form" Grid.Row="0" />
             <Label Content="First Name:" Grid.Row="1" Style="{StaticResource Label}"/>
             <TextBox Grid.Row="1" Style="{StaticResource UserTextBox}"
-                  Text="{Binding FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserFirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
             <Label Content="Middle Name:" Grid.Row="2" Style="{StaticResource Label}"/>
             <TextBox Grid.Row="2" Style="{StaticResource UserTextBox}"
-                  Text="{Binding MiddleName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserMiddleName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
             <Label Content="Last Name:" Grid.Row="3" Style="{StaticResource Label}"/>
             <TextBox Grid.Row="3" Style="{StaticResource UserTextBox}"
-                  Text="{Binding LastName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserLastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
             <Label Content="Username:" Grid.Row="4" Style="{StaticResource Label}"/>
             <TextBox Grid.Row="4" Style="{StaticResource UserTextBox}"
-                  Text="{Binding UserName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserUserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
             <Label Content="Password:" Grid.Row="5" Style="{StaticResource Label}"/>
             <TextBox Grid.Row="5" Style="{StaticResource UserTextBox}"
-                  Text="{Binding Password, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
         </Grid>
     </Grid>
 </UserControl>

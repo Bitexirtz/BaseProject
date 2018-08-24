@@ -51,12 +51,42 @@ namespace Itm.Module.UserManagement.ViewModels
 			set { SetProperty(ref _newUserFormVisibility, value); }
 		}
 
-		private UserModel _newUserModel;
-		public UserModel NewUserModel
+		#region User Bindable Property
+		private string _newUserFirstName;
+		public string NewUserFirstName
 		{
-			get { return _newUserModel; }
-			set { SetProperty(ref _newUserModel, value); }
+			get { return _newUserFirstName; }
+			private set { SetProperty (ref _newUserFirstName, value); }
 		}
+
+		private string _newUserMiddleName;
+		public string NewUserMiddleName
+		{
+			get { return _newUserMiddleName; }
+			private set { SetProperty (ref _newUserMiddleName, value); }
+		}
+
+		private string _newUserLastName;
+		public string NewUserLastName
+		{
+			get { return _newUserLastName; }
+			private set { SetProperty (ref _newUserLastName, value); }
+		}
+
+		private string _newUserUserName;
+		public string NewUserUserName
+		{
+			get { return _newUserUserName; }
+			private set { SetProperty (ref _newUserUserName, value); }
+		}
+
+		private string _newUserPassword;
+		public string NewUserPassword
+		{
+			get { return _newUserPassword; }
+			private set { SetProperty (ref _newUserPassword, value); }
+		}
+		#endregion User Bindable Property
 
 		public ICollectionView _userListView;
 		public ICollectionView UserListView
@@ -72,7 +102,6 @@ namespace Itm.Module.UserManagement.ViewModels
 			_userService = container.Resolve<IUserService>();
 			_eventAggregator = container.Resolve <IEventAggregator>();
 
-			_newUserModel = new UserModel();
 			_title = "-User Management Title-";
 			NewUserFormVisibility = false;
 
@@ -103,10 +132,6 @@ namespace Itm.Module.UserManagement.ViewModels
 
 		private bool CanSaveNewUser()
 		{
-			if(NewUserModel == null || string.IsNullOrEmpty(NewUserModel.FirstName))
-			{
-				return false;
-			}
 
 			return true;
 		}
@@ -154,14 +179,31 @@ namespace Itm.Module.UserManagement.ViewModels
 		private void AddCommandHandler ()
 		{
 			NewUserFormVisibility = true;
-			NewUserModel = new UserModel();
+			InitializeNewUserModel ();
 		}
 
 		private async void SaveCommandHandler ()
 		{
 			NewUserFormVisibility = false;
-			var result = await _userService.AddUserAsync(NewUserModel);
+			var newUserModel = new UserModel {
+				UserName = NewUserUserName,
+				Password = NewUserPassword,
+				FirstName = NewUserFirstName,
+				MiddleName = NewUserMiddleName,
+				LastName = NewUserLastName
+			};
+
+			var result = await _userService.AddUserAsync(newUserModel);
 			await InitializeAsync();
+		}
+
+		private void InitializeNewUserModel()
+		{
+			NewUserUserName = string.Empty;
+			NewUserPassword = string.Empty;
+			NewUserFirstName = string.Empty;
+			NewUserMiddleName = string.Empty;
+			NewUserLastName = string.Empty;
 		}
 
 		private async void DeleteCommandHandler(UserModel user)

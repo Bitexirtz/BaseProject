@@ -60,10 +60,10 @@ namespace Itm.Startup
 			//string options = string.Empty;
 
 			#region SQLite
-			var options = new DbContextOptionsBuilder<AppDbContext>().UseSqlite("Data Source=AppData.db;").Options;
+			var options = new DbContextOptionsBuilder<AppDbContext>().UseSqlite("Data Source=AppData.db3;").Options;
 			#endregion SQLite
 
-			Container.RegisterType<AppDbContext>(new TransientLifetimeManager(), new InjectionConstructor(options));
+			Container.RegisterType<AppDbContext>(new InjectionConstructor(options));
 			Container.RegisterType<ILogger, Logger>(new InjectionConstructor());
 			Container.RegisterType<IMapper, ObjectMapper> ();
 			Container.RegisterType<IAppUser, AppUser>(new InjectionConstructor(1, "LoggedUser"));
