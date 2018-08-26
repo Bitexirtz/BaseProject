@@ -3,21 +3,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using Itm.Database.Services;
+using Itm.DataValidation;
 using Itm.Models;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
-using Prism.Mvvm;
 using Prism.Regions;
 
 namespace Itm.Module.UserManagement.ViewModels
 {
-	public class UserManagementViewModel : BindableBase
+	public class UserManagementViewModel : ViewModelValidationBase
 	{
 		#region Fields
-		IUserService _userService;
-		IEventAggregator _eventAggregator;
-		IRegionManager _regionManager;
+		private IUserService _userService;
+		private IEventAggregator _eventAggregator;
+		private IRegionManager _regionManager;
 		#endregion Fields
 
 		#region Property
@@ -33,6 +33,7 @@ namespace Itm.Module.UserManagement.ViewModels
 		public DelegateCommand OnSaveCommand { get; private set; }
 		public DelegateCommand<UserModel> OnDeleteCommand { get; private set; }
 		public DelegateCommand OnCancelCommand { get; private set; }
+		public DelegateCommand OnValidationErrorCommand { get; private set; }
 		#endregion Command Property
 
 		#region "Bindable Property"
@@ -41,14 +42,17 @@ namespace Itm.Module.UserManagement.ViewModels
 		public string Title
 		{
 			get { return _title; }
-			set { SetProperty (ref _title, value); }
+			set { SetProperty(ref _title, value); }
 		}
 
 		private bool _newUserFormVisibility;
 		public bool NewUserFormVisibility
 		{
 			get { return _newUserFormVisibility; }
-			set { SetProperty(ref _newUserFormVisibility, value); }
+			set {
+				SetProperty(ref _newUserFormVisibility, value);
+				OnAddCommand.RaiseCanExecuteChanged();
+			}
 		}
 
 		#region User Bindable Property
@@ -56,35 +60,38 @@ namespace Itm.Module.UserManagement.ViewModels
 		public string NewUserFirstName
 		{
 			get { return _newUserFirstName; }
-			private set { SetProperty (ref _newUserFirstName, value); }
+			set
+			{
+				SetProperty(ref _newUserFirstName, value);
+			}
 		}
 
 		private string _newUserMiddleName;
 		public string NewUserMiddleName
 		{
 			get { return _newUserMiddleName; }
-			private set { SetProperty (ref _newUserMiddleName, value); }
+			set { SetProperty(ref _newUserMiddleName, value); }
 		}
 
 		private string _newUserLastName;
 		public string NewUserLastName
 		{
 			get { return _newUserLastName; }
-			private set { SetProperty (ref _newUserLastName, value); }
+			set { SetProperty(ref _newUserLastName, value); }
 		}
 
 		private string _newUserUserName;
 		public string NewUserUserName
 		{
 			get { return _newUserUserName; }
-			private set { SetProperty (ref _newUserUserName, value); }
+			set { SetProperty(ref _newUserUserName, value); }
 		}
 
 		private string _newUserPassword;
 		public string NewUserPassword
 		{
 			get { return _newUserPassword; }
-			private set { SetProperty (ref _newUserPassword, value); }
+			set { SetProperty(ref _newUserPassword, value); }
 		}
 		#endregion User Bindable Property
 
@@ -92,109 +99,38 @@ namespace Itm.Module.UserManagement.ViewModels
 		public ICollectionView UserListView
 		{
 			get { return _userListView; }
-			private set { SetProperty (ref _userListView, value); }
+			private set { SetProperty(ref _userListView, value); }
 		}
 		#endregion "Bindable Property"
 
-		public UserManagementViewModel (IUnityContainer container)
+		public UserManagementViewModel(IUnityContainer container)
 		{
 			_regionManager = container.Resolve<IRegionManager>();
 			_userService = container.Resolve<IUserService>();
-			_eventAggregator = container.Resolve <IEventAggregator>();
+			_eventAggregator = container.Resolve<IEventAggregator>();
 
 			_title = "-User Management Title-";
+
+			InitializeCommandHandler();
+
 			NewUserFormVisibility = false;
-
 			SetValidationRules();
-
-			OnFirstCommand = new DelegateCommand (FirstCommandHandler);
-			OnPreviousCommand = new DelegateCommand (PreviousCommandHandler);
-			OnNextCommand = new DelegateCommand (NextCommandHandler);
-			OnLastCommand = new DelegateCommand (LastCommandHandler);
-			OnAddCommand = new DelegateCommand (AddCommandHandler);
-			//OnSaveCommand = new DelegateCommand (SaveCommandHandler, CanSaveNewUser);
-			OnSaveCommand = new DelegateCommand(SaveCommandHandler);
-			OnDeleteCommand = new DelegateCommand<UserModel> (DeleteCommandHandler);
-			OnCancelCommand = new DelegateCommand (CancelCommandHandler);
 
 			Initialization = InitializeAsync();
 			UserListView.MoveCurrentToFirst();
 		}
 
-		private void SetValidationRules()
+		private void InitializeCommandHandler ()
 		{
-			//base.AddRule(() => NewUserModel, () => NewUserModel.FirstName.Length < 5, "First Name is less than 5");
-			//AddRule(() => Aid, () =>
-			//	Aid.Length >= (5 * 2) &&
-			//	Aid.Length <= (16 * 2) &&
-			//	Aid.Length % 2 == 0, "Invalid AID.");
-		}
-
-		private bool CanSaveNewUser()
-		{
-
-			return true;
-		}
-
-		private async Task InitializeAsync()
-		{
-			var result = await _userService.GetUsersAsync();
-			if(result.DidError == false)
-			{
-				UserListView = CollectionViewSource.GetDefaultView(result.Model.ToList());
-			}
-		}
-
-		private void LastCommandHandler ()
-		{
-			UserListView.MoveCurrentToLast ();
-		}
-
-		private void PreviousCommandHandler ()
-		{
-			UserListView.MoveCurrentToPrevious ();
-
-			if (UserListView.IsCurrentBeforeFirst == true)
-			{
-				UserListView.MoveCurrentToFirst();
-			}
-		}
-
-		private void NextCommandHandler ()
-		{
-			
-			UserListView.MoveCurrentToNext ();
-
-			if (UserListView.IsCurrentAfterLast == true)
-			{
-				UserListView.MoveCurrentToLast();
-			}
-		}
-
-		private void FirstCommandHandler ()
-		{
-			UserListView.MoveCurrentToFirst ();
-		}
-
-		private void AddCommandHandler ()
-		{
-			NewUserFormVisibility = true;
-			InitializeNewUserModel ();
-		}
-
-		private async void SaveCommandHandler ()
-		{
-			NewUserFormVisibility = false;
-			var newUserModel = new UserModel {
-				UserName = NewUserUserName,
-				Password = NewUserPassword,
-				FirstName = NewUserFirstName,
-				MiddleName = NewUserMiddleName,
-				LastName = NewUserLastName
-			};
-
-			var result = await _userService.AddUserAsync(newUserModel);
-			await InitializeAsync();
+			OnFirstCommand = new DelegateCommand(FirstCommandHandler);
+			OnPreviousCommand = new DelegateCommand(PreviousCommandHandler);
+			OnNextCommand = new DelegateCommand(NextCommandHandler);
+			OnLastCommand = new DelegateCommand(LastCommandHandler);
+			OnAddCommand = new DelegateCommand(AddCommandHandler, CanAddNewUser);
+			OnSaveCommand = new DelegateCommand(SaveCommandHandler, CanSaveNewUser);
+			OnDeleteCommand = new DelegateCommand<UserModel>(DeleteCommandHandler);
+			OnCancelCommand = new DelegateCommand(CancelCommandHandler);
+			OnValidationErrorCommand = new DelegateCommand(ValidationErrorCommandHandler);
 		}
 
 		private void InitializeNewUserModel()
@@ -206,16 +142,101 @@ namespace Itm.Module.UserManagement.ViewModels
 			NewUserLastName = string.Empty;
 		}
 
+		private void SetValidationRules()
+		{
+			AddRule(() => NewUserFirstName, () => (string.IsNullOrEmpty(NewUserFirstName)), "First Name is required.");
+			AddRule(() => NewUserLastName, () => (string.IsNullOrEmpty(NewUserLastName)), "Last Name is required.");
+			AddRule(() => NewUserUserName, () => (string.IsNullOrEmpty(NewUserUserName)), "Username is required.");
+			AddRule(() => NewUserPassword, () => (string.IsNullOrEmpty(NewUserPassword)), "Password is required.");
+		}
+
+		private void ValidationErrorCommandHandler()
+		{
+			OnSaveCommand.RaiseCanExecuteChanged();
+		}
+
+		private bool CanAddNewUser()
+		{
+			return NewUserFormVisibility == false;
+		}
+
+		private bool CanSaveNewUser()
+		{
+			return NewUserFormVisibility == true && HasErrors == false;
+		}
+
+		private async Task InitializeAsync()
+		{
+			var result = await _userService.GetUsersAsync();
+			if (result.DidError == false)
+			{
+				UserListView = CollectionViewSource.GetDefaultView(result.Model.ToList());
+			}
+		}
+
+		private void LastCommandHandler()
+		{
+			UserListView.MoveCurrentToLast();
+		}
+
+		private void PreviousCommandHandler()
+		{
+			UserListView.MoveCurrentToPrevious();
+
+			if (UserListView.IsCurrentBeforeFirst == true)
+			{
+				UserListView.MoveCurrentToFirst();
+			}
+		}
+
+		private void NextCommandHandler()
+		{
+
+			UserListView.MoveCurrentToNext();
+
+			if (UserListView.IsCurrentAfterLast == true)
+			{
+				UserListView.MoveCurrentToLast();
+			}
+		}
+
+		private void FirstCommandHandler()
+		{
+			UserListView.MoveCurrentToFirst();
+		}
+
+		private void AddCommandHandler()
+		{
+			NewUserFormVisibility = true;
+			InitializeNewUserModel();
+		}
+
+		private async void SaveCommandHandler()
+		{
+			NewUserFormVisibility = false;
+			var newUserModel = new UserModel
+			{
+				UserName = NewUserUserName,
+				Password = NewUserPassword,
+				FirstName = NewUserFirstName,
+				MiddleName = NewUserMiddleName,
+				LastName = NewUserLastName
+			};
+
+			var result = await _userService.AddUserAsync(newUserModel);
+			await InitializeAsync();
+		}
+
 		private async void DeleteCommandHandler(UserModel user)
 		{
-			if(user != null)
+			if (user != null)
 			{
 				await _userService.RemoveUserAsync(user.ID);
 				await InitializeAsync();
 			}
 		}
 
-		private void CancelCommandHandler ()
+		private void CancelCommandHandler()
 		{
 			NewUserFormVisibility = false;
 		}

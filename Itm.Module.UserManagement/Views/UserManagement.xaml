@@ -3,9 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              mc:Ignorable="d"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:cc="clr-namespace:Itm.CustomControls;assembly=Itm.CustomControls" 
              d:DesignHeight="500" d:DesignWidth="600">
     <UserControl.Resources>
         <Style x:Key="Label" TargetType="{x:Type Label}" BasedOn="{x:Null}">
@@ -20,6 +22,21 @@
             <Setter Property="Margin" Value="3"/>
             <Setter Property="Height" Value="26"/>
             <Setter Property="Width" Value="150"/>
+            <Setter Property="cc:ValidationSummaryValidator.AdornerSite" Value="{Binding ElementName=validationSummary}" />
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <DockPanel LastChildFill="true">
+                            <Border Background="Red" DockPanel.Dock="right" Margin="5,0,0,0" Width="20" Height="20" CornerRadius="10"
+                                    ToolTip="{Binding ElementName=UserTextBoxAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}">
+                                <TextBlock Text="!" VerticalAlignment="center" HorizontalAlignment="center" FontWeight="Bold" Foreground="white">
+                                </TextBlock>
+                            </Border>
+                            <AdornedElementPlaceholder Name="UserTextBoxAdorner" VerticalAlignment="Center" />
+                        </DockPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <Style x:Key="NavButton" TargetType="{x:Type Button}" BasedOn="{x:Null}">
@@ -48,7 +65,7 @@
             <Button Content="Cancel" Command="{Binding OnCancelCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>
         </StackPanel>
 
-        <Grid x:Name="existingCustomerGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Background="AntiqueWhite" DataContext="{Binding UserListView}">
+        <Grid Grid.Row="1" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Background="AntiqueWhite" DataContext="{Binding UserListView}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" MinWidth="250"/>
                 <ColumnDefinition Width="Auto" MinWidth="50"/>
@@ -126,6 +143,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.Style>
                 <Style TargetType="Grid">
@@ -139,25 +157,58 @@
             </Grid.Style>
 
             <TextBlock Text="New User Form" Grid.Row="0" />
-            <Label Content="First Name:" Grid.Row="1" Style="{StaticResource Label}"/>
-            <TextBox Grid.Row="1" Style="{StaticResource UserTextBox}"
-                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserFirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
-
-            <Label Content="Middle Name:" Grid.Row="2" Style="{StaticResource Label}"/>
+            
+            <cc:ValidationSummary x:Name="validationSummary" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" />
+            
+            <Label Content="First Name:" Grid.Row="2" Style="{StaticResource Label}"/>
             <TextBox Grid.Row="2" Style="{StaticResource UserTextBox}"
-                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserMiddleName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserFirstName, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=true}">
+                <i:Interaction.Triggers>
+                    <cc:ValidationErrorEventTrigger>
+                        <i:InvokeCommandAction Command="{Binding OnValidationErrorCommand}"/>
+                    </cc:ValidationErrorEventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
 
-            <Label Content="Last Name:" Grid.Row="3" Style="{StaticResource Label}"/>
+            <Label Content="Middle Name:" Grid.Row="3" Style="{StaticResource Label}"/>
             <TextBox Grid.Row="3" Style="{StaticResource UserTextBox}"
-                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserLastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserMiddleName, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=true}">
+                <i:Interaction.Triggers>
+                    <cc:ValidationErrorEventTrigger>
+                        <i:InvokeCommandAction Command="{Binding OnValidationErrorCommand}"/>
+                    </cc:ValidationErrorEventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
 
-            <Label Content="Username:" Grid.Row="4" Style="{StaticResource Label}"/>
+            <Label Content="Last Name:" Grid.Row="4" Style="{StaticResource Label}"/>
             <TextBox Grid.Row="4" Style="{StaticResource UserTextBox}"
-                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserUserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserLastName, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=true}">
+                <i:Interaction.Triggers>
+                    <cc:ValidationErrorEventTrigger>
+                        <i:InvokeCommandAction Command="{Binding OnValidationErrorCommand}"/>
+                    </cc:ValidationErrorEventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
 
-            <Label Content="Password:" Grid.Row="5" Style="{StaticResource Label}"/>
+            <Label Content="Username:" Grid.Row="5" Style="{StaticResource Label}"/>
             <TextBox Grid.Row="5" Style="{StaticResource UserTextBox}"
-                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserUserName, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=true}">
+                <i:Interaction.Triggers>
+                    <cc:ValidationErrorEventTrigger>
+                        <i:InvokeCommandAction Command="{Binding OnValidationErrorCommand}"/>
+                    </cc:ValidationErrorEventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+
+            <Label Content="Password:" Grid.Row="6" Style="{StaticResource Label}"/>
+            <TextBox Grid.Row="6" Style="{StaticResource UserTextBox}"
+                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserPassword, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=true}">
+                <i:Interaction.Triggers>
+                    <cc:ValidationErrorEventTrigger>
+                        <i:InvokeCommandAction Command="{Binding OnValidationErrorCommand}"/>
+                    </cc:ValidationErrorEventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
         </Grid>
     </Grid>
 </UserControl>

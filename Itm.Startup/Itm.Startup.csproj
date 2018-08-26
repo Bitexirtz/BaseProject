@@ -168,9 +168,6 @@
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
     </Reference>
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Prism.Wpf.6.3.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -247,6 +244,10 @@
     <ProjectReference Include="..\Itm.Database.Services\Itm.Database.Services.csproj">
       <Project>{EED453AD-9272-48F2-8616-EA2545792D9F}</Project>
       <Name>Itm.Database.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Itm.DataValidation\Itm.DataValidation.csproj">
+      <Project>{4ac020d8-9ae4-4053-baa6-f6b40a57a422}</Project>
+      <Name>Itm.DataValidation</Name>
     </ProjectReference>
     <ProjectReference Include="..\Itm.Definitions\Itm.Definitions.csproj">
       <Project>{e40462fb-6d4d-4b4f-8911-2b8cfe7f6528}</Project>

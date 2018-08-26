@@ -8,7 +8,7 @@ using Prism.Mvvm;
 
 namespace Itm.DataValidation
 {
-	public class ModelValidationBase : BindableBase, IDataErrorInfo
+	public class ViewModelValidationBase : BindableBase, IDataErrorInfo
 	{
 		private Dictionary<string, Binder> ruleMap = new Dictionary<string, Binder>();
 
@@ -105,7 +105,7 @@ namespace Itm.DataValidation
 				HasError = false;
 				try
 				{
-					if (!ruleDelegate())
+					if (ruleDelegate() == true)
 					{
 						Error = message;
 						HasError = true;
