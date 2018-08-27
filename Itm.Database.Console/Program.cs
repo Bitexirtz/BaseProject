@@ -58,6 +58,12 @@ namespace Itm.Database.Console
 
 			await repo.AddUserAsync (newUser);
 
+			var updateUser = repo.GetUserByIDWithCredentialsAsync (1);
+			if (updateUser.Result.Model != null && updateUser.Result.DidError == false) {
+				updateUser.Result.Model.LastName = "Update-1";
+				await repo.UpdateUserAsync (updateUser.Result.Model);
+			}
+
 			//var updateUser = repo.GetUsersByIDAsync (1);
 			//if (updateUser.Result.Model != null && updateUser.Result.DidError == false) {
 			//	updateUser.Result.Model.LastName = "Update-1";
