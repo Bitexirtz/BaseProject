@@ -9,9 +9,13 @@ namespace Itm.Database.Repositories
     {
         IQueryable<User> GetAll(int pageSize = 10, int pageNumber = 1);
 
-        Task<User> GetByIDAsync(int userID);
+		IQueryable<User> GetAllWithCredentials (int pageSize = 10, int pageNumber = 1);
 
-        Task<int> AddAsync(User entity);
+		Task<User> GetByIDAsync(int userID);
+
+		Task<User> GetByIDWithCredentialsAsync (int userID);
+
+		Task<int> AddAsync(User entity);
 
         Task<int> UpdateAsync(User changes);
 

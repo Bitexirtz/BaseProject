@@ -44,7 +44,23 @@ namespace Itm.Database.Services
 			return response;
 		}
 
-		public async Task<ISingleResponse<UserModel>> GetUsersByIDAsync (int userID)
+		public async Task<IListResponse<UserModel>> GetUsersWithCredentialsAsync (int pageSize = 0, int pageNumber = 0)
+		{
+			Logger.Info (CreateInvokedMethodLog (MethodBase.GetCurrentMethod ().ReflectedType.FullName));
+
+			var response = new ListResponse<UserModel> ();
+
+			try {
+				response.Model = await _userRepository.GetAllWithCredentials (pageSize, pageNumber).Select (o => Mapper.Map<UserModel> (o)).ToListAsync ();
+			}
+			catch (Exception ex) {
+				response.SetError (ex, Logger);
+			}
+
+			return response;
+		}
+
+		public async Task<ISingleResponse<UserModel>> GetUserByIDAsync (int userID)
 		{
 			Logger.Info (CreateInvokedMethodLog (MethodBase.GetCurrentMethod ().ReflectedType.FullName));
 
@@ -53,11 +69,23 @@ namespace Itm.Database.Services
 			try {
 				var userDetails = await _userRepository.GetByIDAsync(userID);
 
-				if(userDetails != null)
-				{
-					// Load also User Credentials
-					DbContext.Entry(userDetails).Reference(r => r.UserCredential).Load();
-				}
+				response.Model = Mapper.Map<UserModel> (userDetails);
+			}
+			catch (Exception ex) {
+				response.SetError (ex, Logger);
+			}
+
+			return response;
+		}
+
+		public async Task<ISingleResponse<UserModel>> GetUserByIDWithCredentialsAsync (int userID)
+		{
+			Logger.Info (CreateInvokedMethodLog (MethodBase.GetCurrentMethod ().ReflectedType.FullName));
+
+			var response = new SingleResponse<UserModel> ();
+
+			try {
+				var userDetails = await _userRepository.GetByIDWithCredentialsAsync (userID);
 
 				response.Model = Mapper.Map<UserModel> (userDetails);
 			}

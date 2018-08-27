@@ -167,7 +167,7 @@ namespace Itm.Module.UserManagement.ViewModels
 
 		private async Task InitializeAsync()
 		{
-			var result = await _userService.GetUsersAsync();
+			var result = await _userService.GetUsersWithCredentialsAsync();
 			if (result.DidError == false)
 			{
 				UserListView = CollectionViewSource.GetDefaultView(result.Model.ToList());

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Itm.Database.Context;
 using Itm.Database.Core.Entities;
 using Itm.Database.Entities;
+using Itm.Database.Repositories.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Itm.Database.Repositories
@@ -19,12 +20,18 @@ namespace Itm.Database.Repositories
         public async Task<User> GetByIDAsync(int userID)
                 => await DbContext.Set<User>().FirstOrDefaultAsync(item => item.ID == userID);
 
-        public IQueryable<User> GetAll(int pageSize = 10, int pageNumber = 1)
-                => DbContext.Paging<User>(pageSize, pageNumber);
-        #endregion "Read Method"
+		public async Task<User> GetByIDWithCredentialsAsync (int entityID)
+				=> await DbContext.Set<User> ().EagerWhere (m => m.ID == entityID).FirstOrDefaultAsync ();
 
-        #region "Write Method"
-        public async Task<int> AddAsync(User entity)
+		public IQueryable<User> GetAll(int pageSize = 10, int pageNumber = 1)
+                => DbContext.Paging<User>(pageSize, pageNumber);
+
+		public IQueryable<User> GetAllWithCredentials (int pageSize = 10, int pageNumber = 1)
+				=> DbContext.Set<User> ().PagingWithCredentials (pageSize, pageNumber);
+		#endregion "Read Method"
+
+		#region "Write Method"
+		public async Task<int> AddAsync(User entity)
         {
             Add(entity);
 
