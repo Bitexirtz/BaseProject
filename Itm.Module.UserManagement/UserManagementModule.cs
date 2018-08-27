@@ -1,26 +1,32 @@
-﻿using Itm.Database.Services;
-using Itm.Definitions;
+﻿using Itm.Definitions;
+using Itm.Module.UserManagement.Commands;
+using Itm.Module.UserManagement.Definitions;
 using Microsoft.Practices.Unity;
 using Prism.Modularity;
 using Prism.Regions;
 
 namespace Itm.Module.UserManagement
 {
-	public class UserManagementModule : IModule
-	{
-		private IRegionManager _regionManager;
-		private IUnityContainer _container;
+    public class UserManagementModule : IModule
+    {
+        private IRegionManager _regionManager;
+        private IUnityContainer _container;
 
-		public UserManagementModule (IUnityContainer container)
-		{
-			_container = container;
-			_regionManager = container.Resolve<IRegionManager>();
-		}
+        public UserManagementModule(IUnityContainer container)
+        {
+            _container = container;
+            _regionManager = container.Resolve<IRegionManager>();
 
-		public void Initialize ()
-		{
-			_regionManager.RegisterViewWithRegion (RegionNames.MenuBarRegion, () => _container.Resolve<Views.UserManagementMenu>());
-			_regionManager.RegisterViewWithRegion (RegionNames.ContentRegion, () => _container.Resolve <Views.UserManagement>());
-		}
-	}
+            container.RegisterType<IModuleCommands, ModuleCommands>(new ContainerControlledLifetimeManager());
+        }
+
+        public void Initialize()
+        {
+            _regionManager.RegisterViewWithRegion(RegionNames.MenuBarRegion, () => _container.Resolve<Views.UserManagementMenu>());
+            _regionManager.RegisterViewWithRegion(RegionNames.ContentRegion, () => _container.Resolve<Views.UserManagement>());
+
+            IRegion region = _regionManager.Regions[ModuleRegionNames.ModuleContentRegion];
+            region.Add(_container.Resolve<Views.UserRegistration>());
+        }
+    }
 }

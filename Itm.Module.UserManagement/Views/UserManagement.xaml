@@ -1,43 +1,14 @@
 ﻿<UserControl x:Class="Itm.Module.UserManagement.Views.UserManagement"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-             mc:Ignorable="d"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:r="clr-namespace:Itm.Module.UserManagement.Definitions"
+             mc:Ignorable="d"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             xmlns:cc="clr-namespace:Itm.CustomControls;assembly=Itm.CustomControls" 
              d:DesignHeight="500" d:DesignWidth="600">
     <UserControl.Resources>
-        <Style x:Key="Label" TargetType="{x:Type Label}" BasedOn="{x:Null}">
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="3"/>
-            <Setter Property="Height" Value="23"/>
-        </Style>
-        <Style x:Key="UserTextBox" TargetType="{x:Type TextBox}" BasedOn="{x:Null}">
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="3"/>
-            <Setter Property="Height" Value="26"/>
-            <Setter Property="Width" Value="150"/>
-            <Setter Property="cc:ValidationSummaryValidator.AdornerSite" Value="{Binding ElementName=validationSummary}" />
-            <Setter Property="Validation.ErrorTemplate">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <DockPanel LastChildFill="true">
-                            <Border Background="Red" DockPanel.Dock="right" Margin="5,0,0,0" Width="20" Height="20" CornerRadius="10"
-                                    ToolTip="{Binding ElementName=UserTextBoxAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}">
-                                <TextBlock Text="!" VerticalAlignment="center" HorizontalAlignment="center" FontWeight="Bold" Foreground="white">
-                                </TextBlock>
-                            </Border>
-                            <AdornedElementPlaceholder Name="UserTextBoxAdorner" VerticalAlignment="Center" />
-                        </DockPanel>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
 
         <Style x:Key="NavButton" TargetType="{x:Type Button}" BasedOn="{x:Null}">
             <Setter Property="FontSize" Value="24"/>
@@ -45,6 +16,10 @@
             <Setter Property="Margin" Value="2,2,2,0"/>
             <Setter Property="Width" Value="40"/>
             <Setter Property="Height" Value="auto"/>
+        </Style>
+
+        <Style TargetType="TabItem">
+            <Setter Property="Header" Value="{Binding DataContext.Title}" />
         </Style>
     </UserControl.Resources>
     <Grid>
@@ -55,160 +30,18 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="2,2,2,0" Height="36" VerticalAlignment="Top" Background="Gainsboro">
-            <Button Content="|◄" Command="{Binding OnFirstCommand}" Style="{StaticResource NavButton}"/>
+            <Button Content="|◄" Command="{Binding DataContext.OnFirstCommand}" Style="{StaticResource NavButton}"/>
             <Button Content="◄" Command="{Binding OnPreviousCommand}" Style="{StaticResource NavButton}"/>
             <Button Content="►" Command="{Binding OnNextCommand}" Style="{StaticResource NavButton}"/>
             <Button Content="►|" Command="{Binding OnLastCommand}" Style="{StaticResource NavButton}"/>
             <Button Content="Delete User" Command="{Binding OnDeleteCommand}" CommandParameter="{Binding ElementName=UsersDataGrid, Path=SelectedItem}" FontSize="11" Width="120" Style="{StaticResource NavButton}"/>
-            <Button Content="New User" Command="{Binding OnAddCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>
+            <!--<Button Content="New User" Command="{Binding OnAddCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>-->
+            <Button Content="New User" Command="{Binding ModuleCommands.NewCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>
+            
             <Button Content="Save" Command="{Binding OnSaveCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>
             <Button Content="Cancel" Command="{Binding OnCancelCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>
         </StackPanel>
 
-        <Grid Grid.Row="1" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Background="AntiqueWhite" DataContext="{Binding UserListView}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" MinWidth="250"/>
-                <ColumnDefinition Width="Auto" MinWidth="50"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Visible"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserFormVisibility}" Value="True">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
-
-            <Label Content="User ID:" Grid.Row="0" Style="{StaticResource Label}"/>
-            <TextBox Grid.Row="0" IsReadOnly="True" Style="{StaticResource UserTextBox}"
-                  Text="{Binding ElementName=UsersDataGrid, Path=SelectedItem.ID, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-
-            <Label Content="First Name:" Grid.Row="1" Style="{StaticResource Label}"/>
-            <TextBox Grid.Row="1" Style="{StaticResource UserTextBox}"
-                  Text="{Binding ElementName=UsersDataGrid, Path=SelectedItem.FirstName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-
-            <Label Content="Middle Name:" Grid.Row="2" Style="{StaticResource Label}"/>
-            <TextBox Grid.Row="2" Style="{StaticResource UserTextBox}"
-                  Text="{Binding ElementName=UsersDataGrid, Path=SelectedItem.MiddleName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-
-            <Label Content="Last Name:" Grid.Row="3" Style="{StaticResource Label}"/>
-            <TextBox Grid.Row="3" Style="{StaticResource UserTextBox}"
-                  Text="{Binding ElementName=UsersDataGrid, Path=SelectedItem.LastName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-
-            <Label Content="Username:" Grid.Row="4" Style="{StaticResource Label}"/>
-            <TextBox Grid.Row="4" Style="{StaticResource UserTextBox}"
-                  Text="{Binding ElementName=UsersDataGrid, Path=SelectedItem.UserName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-
-            <Label Content="Password:" Grid.Row="5" Style="{StaticResource Label}"/>
-            <TextBox Grid.Row="5" Style="{StaticResource UserTextBox}"
-                  Text="{Binding ElementName=UsersDataGrid, Path=SelectedItem.Password, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-        </Grid>
-
-        <DataGrid x:Name="UsersDataGrid" SelectionUnit="FullRow" SelectionMode="Single"  AutoGenerateColumns="False" CanUserAddRows="false" IsEnabled="True" EnableRowVirtualization="True" Width="auto" ItemsSource="{Binding UserListView}" Margin="10,10,10,10" Grid.Row="2" RowDetailsVisibilityMode="VisibleWhenSelected" IsSynchronizedWithCurrentItem="True" >
-            <DataGrid.Columns>
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Content="Delete" Command="{Binding Path=DataContext.OnDeleteCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding ID}" IsReadOnly="True" Header="ID" Width="SizeToHeader"/>
-                <DataGridTextColumn Binding="{Binding FirstName}" Header="First Name" Width="SizeToHeader"/>
-                <DataGridTextColumn Binding="{Binding MiddleName}" Header="Middle Name" Width="SizeToHeader"/>
-                <DataGridTextColumn Binding="{Binding LastName}" Header="Last Name" Width="SizeToHeader"/>
-                <DataGridTextColumn Binding="{Binding Password}" Header="Password" Width="SizeToHeader"/>
-            </DataGrid.Columns>
-        </DataGrid>
-
-        <Grid x:Name="NewUserGrid" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" Background="CornflowerBlue">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" MinWidth="250"/>
-                <ColumnDefinition Width="Auto" MinWidth="50"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserFormVisibility}" Value="True">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
-
-            <TextBlock Text="New User Form" Grid.Row="0" />
-            
-            <cc:ValidationSummary x:Name="validationSummary" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" />
-            
-            <Label Content="First Name:" Grid.Row="2" Style="{StaticResource Label}"/>
-            <TextBox Grid.Row="2" Style="{StaticResource UserTextBox}"
-                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserFirstName, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=true}">
-                <i:Interaction.Triggers>
-                    <cc:ValidationErrorEventTrigger>
-                        <i:InvokeCommandAction Command="{Binding OnValidationErrorCommand}"/>
-                    </cc:ValidationErrorEventTrigger>
-                </i:Interaction.Triggers>
-            </TextBox>
-
-            <Label Content="Middle Name:" Grid.Row="3" Style="{StaticResource Label}"/>
-            <TextBox Grid.Row="3" Style="{StaticResource UserTextBox}"
-                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserMiddleName, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=true}">
-                <i:Interaction.Triggers>
-                    <cc:ValidationErrorEventTrigger>
-                        <i:InvokeCommandAction Command="{Binding OnValidationErrorCommand}"/>
-                    </cc:ValidationErrorEventTrigger>
-                </i:Interaction.Triggers>
-            </TextBox>
-
-            <Label Content="Last Name:" Grid.Row="4" Style="{StaticResource Label}"/>
-            <TextBox Grid.Row="4" Style="{StaticResource UserTextBox}"
-                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserLastName, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=true}">
-                <i:Interaction.Triggers>
-                    <cc:ValidationErrorEventTrigger>
-                        <i:InvokeCommandAction Command="{Binding OnValidationErrorCommand}"/>
-                    </cc:ValidationErrorEventTrigger>
-                </i:Interaction.Triggers>
-            </TextBox>
-
-            <Label Content="Username:" Grid.Row="5" Style="{StaticResource Label}"/>
-            <TextBox Grid.Row="5" Style="{StaticResource UserTextBox}"
-                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserUserName, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=true}">
-                <i:Interaction.Triggers>
-                    <cc:ValidationErrorEventTrigger>
-                        <i:InvokeCommandAction Command="{Binding OnValidationErrorCommand}"/>
-                    </cc:ValidationErrorEventTrigger>
-                </i:Interaction.Triggers>
-            </TextBox>
-
-            <Label Content="Password:" Grid.Row="6" Style="{StaticResource Label}"/>
-            <TextBox Grid.Row="6" Style="{StaticResource UserTextBox}"
-                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.NewUserPassword, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=true}">
-                <i:Interaction.Triggers>
-                    <cc:ValidationErrorEventTrigger>
-                        <i:InvokeCommandAction Command="{Binding OnValidationErrorCommand}"/>
-                    </cc:ValidationErrorEventTrigger>
-                </i:Interaction.Triggers>
-            </TextBox>
-        </Grid>
+        <TabControl Grid.Row="1" Margin="10" prism:RegionManager.RegionName="{x:Static r:ModuleRegionNames.ModuleContentRegion}" />
     </Grid>
 </UserControl>
