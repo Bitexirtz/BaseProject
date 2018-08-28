@@ -80,11 +80,16 @@
   <ItemGroup>
     <Compile Include="Commands\IModuleCommands.cs" />
     <Compile Include="Commands\ModuleCommands.cs" />
+    <Compile Include="Definitions\Enumeration.cs" />
     <Compile Include="Definitions\ModuleRegionNames.cs" />
     <Compile Include="UserManagementModule.cs" />
+    <Compile Include="ViewModels\RoleRegistrationViewModel.cs" />
     <Compile Include="ViewModels\UserManagementMenuViewModel.cs" />
     <Compile Include="ViewModels\UserManagementViewModel.cs" />
     <Compile Include="ViewModels\UserRegistrationViewModel.cs" />
+    <Compile Include="Views\RoleRegistration.xaml.cs">
+      <DependentUpon>RoleRegistration.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserManagement.xaml.cs">
       <DependentUpon>UserManagement.xaml</DependentUpon>
     </Compile>
@@ -94,6 +99,10 @@
     <Compile Include="Views\UserRegistration.xaml.cs">
       <DependentUpon>UserRegistration.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\RoleRegistration.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UserManagement.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

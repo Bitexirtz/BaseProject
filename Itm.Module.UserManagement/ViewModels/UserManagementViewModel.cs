@@ -1,14 +1,11 @@
-﻿using Itm.Database.Services;
-using Itm.DataValidation;
-using Itm.Module.UserManagement.Commands;
+﻿using Itm.Module.UserManagement.Commands;
 using Microsoft.Practices.Unity;
-using Prism.Events;
-using Prism.Regions;
+using Prism.Mvvm;
 
 namespace Itm.Module.UserManagement.ViewModels
 {
-    public class UserManagementViewModel : ViewModelValidationBase
-    {
+	public class UserManagementViewModel : BindableBase
+	{
         private string _title = "User Management";
         public string Title
         {
