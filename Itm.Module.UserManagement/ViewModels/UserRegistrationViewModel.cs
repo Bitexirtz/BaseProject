@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Media;
 using Itm.Database.Services;
 using Itm.DataValidation;
 using Itm.Models;
@@ -26,6 +27,7 @@ namespace Itm.Module.UserManagement.ViewModels
 		private IModuleCommands _moduleCommands;
 
 		private int _userListViewCount;
+		private ExecutionTypes _currentExecutionType;
 		#endregion Fields
 
 		#region Property
@@ -55,13 +57,13 @@ namespace Itm.Module.UserManagement.ViewModels
 			set { SetProperty (ref _title, value); }
 		}
 
-		private bool _newUserFormVisibility;
-		public bool NewUserFormVisibility
+		private bool _userInfoFormVisibility;
+		public bool UserInfoFormVisibility
 		{
-			get { return _newUserFormVisibility; }
+			get { return _userInfoFormVisibility; }
 			set
 			{
-				SetProperty (ref _newUserFormVisibility, value);
+				SetProperty (ref _userInfoFormVisibility, value);
 			}
 		}
 
@@ -72,6 +74,27 @@ namespace Itm.Module.UserManagement.ViewModels
 			set
 			{
 				SetProperty (ref _isUserListEnabled, value);
+			}
+		}
+
+		private bool _isUserFormReadOnly;
+		public bool IsUserFormReadOnly
+		{
+			get { return _isUserFormReadOnly; }
+			set
+			{
+				SetProperty (ref _isUserFormReadOnly, value);
+				UserFormColor = _isUserFormReadOnly == true ? new SolidColorBrush (Colors.LightBlue) : new SolidColorBrush (Colors.CornflowerBlue);
+			}
+		}
+
+		private Brush _userFormColor;
+		public Brush UserFormColor
+		{
+			get { return _userFormColor; }
+			set
+			{
+				SetProperty (ref _userFormColor, value);
 			}
 		}
 
@@ -114,11 +137,11 @@ namespace Itm.Module.UserManagement.ViewModels
 
 
 		#region Enable/disable Command Property
-		private bool _canAddNewUser;
-		public bool CanAddNewUser
+		private bool _canAddUserInfo;
+		public bool CanAddUserInfo
 		{
-			get { return _canAddNewUser; }
-			set { SetProperty (ref _canAddNewUser, value); }
+			get { return _canAddUserInfo; }
+			set { SetProperty (ref _canAddUserInfo, value); }
 		}
 
 		private bool _canEditUser;
@@ -179,42 +202,42 @@ namespace Itm.Module.UserManagement.ViewModels
 		#endregion Enable/disable Command Property
 
 		#region User Bindable Property
-		private string _newUserFirstName;
-		public string NewUserFirstName
+		private string _userInfoFirstName;
+		public string UserInfoFirstName
 		{
-			get { return _newUserFirstName; }
+			get { return _userInfoFirstName; }
 			set
 			{
-				SetProperty (ref _newUserFirstName, value);
+				SetProperty (ref _userInfoFirstName, value);
 			}
 		}
 
-		private string _newUserMiddleName;
-		public string NewUserMiddleName
+		private string _userInfoMiddleName;
+		public string UserInfoMiddleName
 		{
-			get { return _newUserMiddleName; }
-			set { SetProperty (ref _newUserMiddleName, value); }
+			get { return _userInfoMiddleName; }
+			set { SetProperty (ref _userInfoMiddleName, value); }
 		}
 
-		private string _newUserLastName;
-		public string NewUserLastName
+		private string _userInfoLastName;
+		public string UserInfoLastName
 		{
-			get { return _newUserLastName; }
-			set { SetProperty (ref _newUserLastName, value); }
+			get { return _userInfoLastName; }
+			set { SetProperty (ref _userInfoLastName, value); }
 		}
 
-		private string _newUserUserName;
-		public string NewUserUserName
+		private string _userInfoUserName;
+		public string UserInfoUserName
 		{
-			get { return _newUserUserName; }
-			set { SetProperty (ref _newUserUserName, value); }
+			get { return _userInfoUserName; }
+			set { SetProperty (ref _userInfoUserName, value); }
 		}
 
-		private string _newUserPassword;
-		public string NewUserPassword
+		private string _userInfoPassword;
+		public string UserInfoPassword
 		{
-			get { return _newUserPassword; }
-			set { SetProperty (ref _newUserPassword, value); }
+			get { return _userInfoPassword; }
+			set { SetProperty (ref _userInfoPassword, value); }
 		}
 		#endregion User Bindable Property
 
@@ -255,6 +278,7 @@ namespace Itm.Module.UserManagement.ViewModels
 		private void InitializeFields ()
 		{
 			_userListViewCount = 0;
+			_currentExecutionType = ExecutionTypes.None;
 		}
 
 		private async Task InitializeAsync ()
@@ -268,7 +292,7 @@ namespace Itm.Module.UserManagement.ViewModels
 		private void InitializeCommandHandler ()
 		{
 			// User operations
-			OnAddCommand = new DelegateCommand (AddCommandHandler).ObservesCanExecute (() => CanAddNewUser);
+			OnAddCommand = new DelegateCommand (AddCommandHandler).ObservesCanExecute (() => CanAddUserInfo);
 			OnEditCommand = new DelegateCommand (EditCommandHandler).ObservesCanExecute (() => CanEditUser);
 			OnDeleteCommand = new DelegateCommand<UserModel> (DeleteCommandHandler).ObservesCanExecute (() => CanDeleteUser);
 			OnSaveCommand = new DelegateCommand (SaveCommandHandler).ObservesCanExecute (() => CanSaveUser);
@@ -294,21 +318,21 @@ namespace Itm.Module.UserManagement.ViewModels
 			_moduleCommands.LastNavCommand.RegisterCommand (OnLastNavCommand);
 		}
 
-		private void InitializeNewUserModel ()
+		private void InitializeUserInfoModel ()
 		{
-			NewUserUserName = string.Empty;
-			NewUserPassword = string.Empty;
-			NewUserFirstName = string.Empty;
-			NewUserMiddleName = string.Empty;
-			NewUserLastName = string.Empty;
+			UserInfoUserName = string.Empty;
+			UserInfoPassword = string.Empty;
+			UserInfoFirstName = string.Empty;
+			UserInfoMiddleName = string.Empty;
+			UserInfoLastName = string.Empty;
 		}
 
 		private void SetValidationRules ()
 		{
-			AddRule (() => NewUserFirstName, () => (string.IsNullOrEmpty (NewUserFirstName)), "First Name is required.");
-			AddRule (() => NewUserLastName, () => (string.IsNullOrEmpty (NewUserLastName)), "Last Name is required.");
-			AddRule (() => NewUserUserName, () => (string.IsNullOrEmpty (NewUserUserName)), "Username is required.");
-			AddRule (() => NewUserPassword, () => (string.IsNullOrEmpty (NewUserPassword)), "Password is required.");
+			AddRule (() => UserInfoFirstName, () => (string.IsNullOrEmpty (UserInfoFirstName)), "First Name is required.");
+			AddRule (() => UserInfoLastName, () => (string.IsNullOrEmpty (UserInfoLastName)), "Last Name is required.");
+			AddRule (() => UserInfoUserName, () => (string.IsNullOrEmpty (UserInfoUserName)), "Username is required.");
+			AddRule (() => UserInfoPassword, () => (string.IsNullOrEmpty (UserInfoPassword)), "Password is required.");
 		}
 
 		#endregion Initialization Method
@@ -379,7 +403,7 @@ namespace Itm.Module.UserManagement.ViewModels
 		{
 			SetCommandEnableStatus (ExecutionTypes.Add);
 
-			InitializeNewUserModel ();
+			InitializeUserInfoModel ();
 		}
 
 		private void EditCommandHandler ()
@@ -398,16 +422,30 @@ namespace Itm.Module.UserManagement.ViewModels
 
 		private async void SaveCommandHandler ()
 		{
-			var newUserModel = new UserModel
-			{
-				UserName = NewUserUserName,
-				Password = NewUserPassword,
-				FirstName = NewUserFirstName,
-				MiddleName = NewUserMiddleName,
-				LastName = NewUserLastName
-			};
+			switch (_currentExecutionType) {
+				case ExecutionTypes.Add: 
+					{
+						var newUserModel = new UserModel
+						{
+							UserName = UserInfoUserName,
+							Password = UserInfoPassword,
+							FirstName = UserInfoFirstName,
+							MiddleName = UserInfoMiddleName,
+							LastName = UserInfoLastName
+						};
 
-			var result = await _userService.AddUserAsync (newUserModel);
+						var result = await _userService.AddUserAsync (newUserModel);
+					}
+					break;
+				case ExecutionTypes.Edit: {
+						
+					}
+					break;
+
+			}
+
+
+
 			await InitializeAsync ();
 
 			SetCommandEnableStatus (ExecutionTypes.Save);
@@ -417,23 +455,29 @@ namespace Itm.Module.UserManagement.ViewModels
 		#region Helper Method
 		private void SetCommandEnableStatus (ExecutionTypes activeType = ExecutionTypes.None)
 		{
+			_currentExecutionType = activeType;
+
 			switch (activeType) {
 				case ExecutionTypes.Add:
 				case ExecutionTypes.Edit:
 				case ExecutionTypes.Delete: {
 						CanCancelUser = true;
-						CanAddNewUser = false;
+						CanAddUserInfo = false;
 						CanEditUser = false;
 						CanDeleteUser = false;
 						CanSaveUser = true;
 
 						IsUserListEnabled = false;
+
+						if(activeType == ExecutionTypes.Edit) {
+							IsUserFormReadOnly = false;
+						}
 					}
 					break;
 
 				default: {
 						CanCancelUser = false;
-						CanAddNewUser = true;
+						CanAddUserInfo = true;
 						CanEditUser = false;
 						CanDeleteUser = false;
 						CanSaveUser = false;
@@ -444,11 +488,13 @@ namespace Itm.Module.UserManagement.ViewModels
 						}
 
 						IsUserListEnabled = true;
+						IsUserFormReadOnly = true;
 					}
 					break;
 			}
 
-			NewUserFormVisibility = activeType == ExecutionTypes.Add ? true : false;
+			// Show New Form if execution type is Add
+			UserInfoFormVisibility = activeType == ExecutionTypes.Add ? true : false;
 		}
 
 		private void SetNavigationCommandEnableStatus ()
