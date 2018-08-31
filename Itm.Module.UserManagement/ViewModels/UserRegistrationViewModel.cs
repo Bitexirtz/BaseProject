@@ -124,6 +124,23 @@ namespace Itm.Module.UserManagement.ViewModels
 			}
 		}
 
+		private UserModel _selectedUser;
+		public UserModel SelectedUser
+		{
+			get { return _selectedUser; }
+			set
+			{
+				SetProperty (ref _selectedUser, value);
+
+				UserInfoID = _selectedUser.ID;
+				UserInfoFirstName = _selectedUser.FirstName;
+				UserInfoMiddleName = _selectedUser.MiddleName;
+				UserInfoLastName = _selectedUser.LastName;
+				UserInfoUserName = _selectedUser.UserName;
+				UserInfoPassword = _selectedUser.Password;
+			}
+		}
+
 		private bool _isActive;
 		public bool IsActive
 		{
@@ -202,6 +219,17 @@ namespace Itm.Module.UserManagement.ViewModels
 		#endregion Enable/disable Command Property
 
 		#region User Bindable Property
+		private int _userInfoID;
+		public int UserInfoID
+		{
+			get { return _userInfoID; }
+			set
+			{
+				SetProperty (ref _userInfoID, value);
+
+			}
+		}
+
 		private string _userInfoFirstName;
 		public string UserInfoFirstName
 		{
