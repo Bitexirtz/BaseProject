@@ -73,32 +73,62 @@
 
 			<Label Content="User ID:" Grid.Row="0" Style="{StaticResource Label}"/>
 			<TextBox Grid.Row="0" IsEnabled="False" IsReadOnly="True" Style="{StaticResource UserTextBox}"
-                  Text="{Binding ElementName=UsersDataGrid, Path=SelectedItem.ID, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.UserInfoID, Mode=OneWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=true}"/>
 
 			<Label Content="First Name:" Grid.Row="1" Style="{StaticResource Label}"/>
 			<TextBox Grid.Row="1" Style="{StaticResource UserTextBox}"
-					 IsReadOnly="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.IsUserFormReadOnly}"
-                  Text="{Binding ElementName=UsersDataGrid, Path=SelectedItem.FirstName, Mode=OneWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+					  IsReadOnly="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.IsUserFormReadOnly}"
+                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.UserInfoFirstName, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=true}">
+				<i:Interaction.Triggers>
+					<cc:ValidationErrorEventTrigger>
+						<i:InvokeCommandAction Command="{Binding OnValidationErrorCommand}"/>
+					</cc:ValidationErrorEventTrigger>
+				</i:Interaction.Triggers>
+			</TextBox>
 
 			<Label Content="Middle Name:" Grid.Row="2" Style="{StaticResource Label}"/>
 			<TextBox Grid.Row="2" Style="{StaticResource UserTextBox}"
-					 IsReadOnly="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.IsUserFormReadOnly}"
-                  Text="{Binding ElementName=UsersDataGrid, Path=SelectedItem.MiddleName, Mode=OneWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+					  IsReadOnly="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.IsUserFormReadOnly}"
+                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.UserInfoMiddleName, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=true}">
+				<i:Interaction.Triggers>
+					<cc:ValidationErrorEventTrigger>
+						<i:InvokeCommandAction Command="{Binding OnValidationErrorCommand}"/>
+					</cc:ValidationErrorEventTrigger>
+				</i:Interaction.Triggers>
+			</TextBox>
 
 			<Label Content="Last Name:" Grid.Row="3" Style="{StaticResource Label}"/>
 			<TextBox Grid.Row="3" Style="{StaticResource UserTextBox}"
-					 IsReadOnly="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.IsUserFormReadOnly}"
-                  Text="{Binding ElementName=UsersDataGrid, Path=SelectedItem.LastName, Mode=OneWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+					  IsReadOnly="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.IsUserFormReadOnly}"
+                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.UserInfoLastName, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=true}">
+				<i:Interaction.Triggers>
+					<cc:ValidationErrorEventTrigger>
+						<i:InvokeCommandAction Command="{Binding OnValidationErrorCommand}"/>
+					</cc:ValidationErrorEventTrigger>
+				</i:Interaction.Triggers>
+			</TextBox>
 
 			<Label Content="Username:" Grid.Row="4" Style="{StaticResource Label}"/>
 			<TextBox Grid.Row="4" Style="{StaticResource UserTextBox}"
-					 IsReadOnly="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.IsUserFormReadOnly}"
-                  Text="{Binding ElementName=UsersDataGrid, Path=SelectedItem.UserName, Mode=OneWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+					  IsReadOnly="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.IsUserFormReadOnly}"
+                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.UserInfoUserName, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=true}">
+				<i:Interaction.Triggers>
+					<cc:ValidationErrorEventTrigger>
+						<i:InvokeCommandAction Command="{Binding OnValidationErrorCommand}"/>
+					</cc:ValidationErrorEventTrigger>
+				</i:Interaction.Triggers>
+			</TextBox>
 
 			<Label Content="Password:" Grid.Row="5" Style="{StaticResource Label}"/>
 			<TextBox Grid.Row="5" Style="{StaticResource UserTextBox}"
-					 IsReadOnly="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.IsUserFormReadOnly}"
-                  Text="{Binding ElementName=UsersDataGrid, Path=SelectedItem.Password, Mode=OneWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+					  IsReadOnly="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.IsUserFormReadOnly}"
+                  Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.UserInfoPassword, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=true}">
+				<i:Interaction.Triggers>
+					<cc:ValidationErrorEventTrigger>
+						<i:InvokeCommandAction Command="{Binding OnValidationErrorCommand}"/>
+					</cc:ValidationErrorEventTrigger>
+				</i:Interaction.Triggers>
+			</TextBox>
 		</Grid>
 
 		<!-- List of Users from DB -->
