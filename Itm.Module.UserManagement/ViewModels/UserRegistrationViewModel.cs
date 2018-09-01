@@ -387,7 +387,7 @@ namespace Itm.Module.UserManagement.ViewModels
 		private void LastNavCommandHandler ()
 		{
 			UserListView.MoveCurrentToLast ();
-			SetNavigationCommandEnableStatus ();
+			SelectedUser = (UserModel) UserListView.CurrentItem;
 		}
 
 		private void PreviousNavCommandHandler ()
@@ -398,7 +398,7 @@ namespace Itm.Module.UserManagement.ViewModels
 				UserListView.MoveCurrentToFirst ();
 			}
 
-			SetNavigationCommandEnableStatus ();
+			SelectedUser = (UserModel)UserListView.CurrentItem;
 		}
 
 		private void NextNavCommandHandler ()
@@ -409,15 +409,14 @@ namespace Itm.Module.UserManagement.ViewModels
 				UserListView.MoveCurrentToLast ();
 			}
 
-			
-			SetNavigationCommandEnableStatus ();
+			SelectedUser = (UserModel)UserListView.CurrentItem;
 		}
 
 		private void FirstNavCommandHandler ()
 		{
 			UserListView.MoveCurrentToFirst ();
 
-			SetNavigationCommandEnableStatus ();
+			SelectedUser = (UserModel)UserListView.CurrentItem;
 		}
 
 		private void CancelCommandHandler ()
@@ -450,6 +449,7 @@ namespace Itm.Module.UserManagement.ViewModels
 			if (user != null) {
 				await _userService.RemoveUserAsync (user.ID);
 				await InitializeAsync ();
+				FirstNavCommandHandler ();
 			}
 		}
 
@@ -488,6 +488,8 @@ namespace Itm.Module.UserManagement.ViewModels
 			}
 
 			await InitializeAsync ();
+
+			FirstNavCommandHandler ();
 
 			SetCommandEnableStatus (ExecutionTypes.Save);
 		}
