@@ -38,8 +38,9 @@ namespace Itm.Module.UserManagement.ViewModels
 		public DelegateCommand OnAddCommand { get; private set; }
 		public DelegateCommand OnEditCommand { get; private set; }
 		public DelegateCommand OnSaveCommand { get; private set; }
-		public DelegateCommand<UserModel> OnDeleteCommand { get; private set; }
+		public DelegateCommand OnDeleteCommand { get; private set; }
 		public DelegateCommand OnCancelCommand { get; private set; }
+		public DelegateCommand<UserModel> OnDeleteUserCommand { get; private set; }
 
 		public DelegateCommand OnFirstNavCommand { get; private set; }
 		public DelegateCommand OnPreviousNavCommand { get; private set; }
@@ -288,12 +289,7 @@ namespace Itm.Module.UserManagement.ViewModels
 			InitializeCommandHandler ();
 			SetCommandEnableStatus ();
 
-			Initialization = InitializeAsync ().ContinueWith (
-				t =>
-				{
-					UserListView.MoveCurrentToFirst ();
-				}
-			);
+			Initialization = InitializeAsync ();
 
 			Title = "User";
 		}
@@ -322,9 +318,10 @@ namespace Itm.Module.UserManagement.ViewModels
 			// User operations
 			OnAddCommand = new DelegateCommand (AddCommandHandler).ObservesCanExecute (() => CanAddUserInfo);
 			OnEditCommand = new DelegateCommand (EditCommandHandler).ObservesCanExecute (() => CanEditUser);
-			OnDeleteCommand = new DelegateCommand<UserModel> (DeleteCommandHandler).ObservesCanExecute (() => CanDeleteUser);
+			OnDeleteCommand = new DelegateCommand (DeleteCommandHandler).ObservesCanExecute (() => CanDeleteUser);
 			OnSaveCommand = new DelegateCommand (SaveCommandHandler).ObservesCanExecute (() => CanSaveUser);
 			OnCancelCommand = new DelegateCommand (CancelCommandHandler).ObservesCanExecute (() => CanCancelUser);
+			OnDeleteUserCommand = new DelegateCommand<UserModel> (DeleteUserCommandHandler).ObservesCanExecute (() => CanDeleteUser);
 
 			// Navigation
 			OnFirstNavCommand = new DelegateCommand (FirstNavCommandHandler).ObservesCanExecute (() => CanNavToFirst);
@@ -412,6 +409,7 @@ namespace Itm.Module.UserManagement.ViewModels
 				UserListView.MoveCurrentToLast ();
 			}
 
+			
 			SetNavigationCommandEnableStatus ();
 		}
 
@@ -439,7 +437,14 @@ namespace Itm.Module.UserManagement.ViewModels
 			SetCommandEnableStatus (ExecutionTypes.Edit);
 		}
 
-		private async void DeleteCommandHandler (UserModel user)
+		private void DeleteCommandHandler ()
+		{
+			if(SelectedUser != null) {
+				DeleteUserCommandHandler (SelectedUser);
+			}
+		}
+
+		private async void DeleteUserCommandHandler (UserModel user)
 		{
 			SetCommandEnableStatus (ExecutionTypes.Delete);
 			if (user != null) {
@@ -465,14 +470,22 @@ namespace Itm.Module.UserManagement.ViewModels
 						var result = await _userService.AddUserAsync (newUserModel);
 					}
 					break;
+
 				case ExecutionTypes.Edit: {
-						
+						var result = await _userService.GetUserByIDAsync (UserInfoID);
+						if(result.DidError == false) {
+							UserModel targetUser = result.Model;
+							targetUser.UserName = UserInfoUserName;
+							targetUser.Password = UserInfoPassword;
+							targetUser.FirstName = UserInfoFirstName;
+							targetUser.MiddleName = UserInfoMiddleName;
+							targetUser.LastName = UserInfoLastName;
+
+							await _userService.UpdateUserAsync (targetUser);
+						}
 					}
 					break;
-
 			}
-
-
 
 			await InitializeAsync ();
 
