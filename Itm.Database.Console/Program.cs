@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using AutoMapper;
 using Itm.Database.Context;
@@ -41,7 +42,12 @@ namespace Itm.Database.Console
 			container.RegisterType<IUserService, UserService>();
 			IAppUser user = container.Resolve<IAppUser>();
 
-			MainAsync(container).Wait();
+            Trace.WriteLine("Trace Start");
+
+            Trace.Flush();
+            MainAsync(container).Wait();
+
+            System.Console.Write("--Finished--");
 		}
 
 		static async Task MainAsync(IUnityContainer container)
