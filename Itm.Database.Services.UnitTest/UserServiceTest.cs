@@ -1,17 +1,15 @@
-﻿using System.Threading.Tasks;
-using Itm.Models;
-using Moq;
-using Xunit;
-using Itm.Database.Core.Services.ResponseTypes;
-using Itm.Log.Core;
-using System;
+﻿using System;
 using System.Diagnostics;
-using Itm.ObjectMap;
-using Itm.Database.Core.Entities;
 using AutoMapper;
 using Itm.Database.Context;
+using Itm.Database.Core.Entities;
+using Itm.Log.Core;
+using Itm.Models;
+using Itm.ObjectMap;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Moq;
+using Xunit;
 
 namespace Itm.Database.Services.UnitTest
 {
@@ -39,7 +37,6 @@ namespace Itm.Database.Services.UnitTest
             var appUser = new AppUser(1, "LoggedUser");
 
             //AppDbContext
-            //https://stackoverflow.com/questions/47553878/mocking-entity-framework-core-context
             var options = new DbContextOptionsBuilder<AppDbContext>()
                   .UseInMemoryDatabase(Guid.NewGuid().ToString())
                   .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning))
