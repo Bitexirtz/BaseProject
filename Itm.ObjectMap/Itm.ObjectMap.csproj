@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Extensions\MappingExpressionExtension.cs" />
     <Compile Include="ObjectMapper.cs" />
+    <Compile Include="RoleProfile.cs" />
     <Compile Include="UserProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

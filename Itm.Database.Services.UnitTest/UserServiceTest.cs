@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using AutoMapper;
 using Itm.Database.Context;
@@ -29,9 +30,9 @@ namespace Itm.Database.Services.UnitTest
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new UserProfile());
-            });
+				cfg.AddProfile (new RoleProfile ());
+			});
             var mapper = config.CreateMapper();
-
 
             // IAppUser
             var appUser = new AppUser(1, "LoggedUser");
@@ -44,14 +45,25 @@ namespace Itm.Database.Services.UnitTest
 
             var appDbContext = new AppDbContext(options);
 
-            IUserService userService = new UserService(loggerMock.Object, mapper, appUser, appDbContext);
+			IRoleService roleService = new RoleService (loggerMock.Object, mapper, appUser, appDbContext);
+			IUserService userService = new UserService(loggerMock.Object, mapper, appUser, appDbContext);
 
-            var newUser = new UserModel
+			var newRole = new RoleModel
+			{
+				Name = "Role 1",
+				Description = "Role 1 Description"
+			};
+
+			// act
+			var dbRole = roleService.AddRoleAsync (newRole);
+
+			var newUser = new UserModel
             {
                 FirstName = "User-" + DateTime.Now.ToString(),
                 LastName = "Last Name",
                 UserName = "Username",
-                Password = "Password"
+                Password = "Password",
+				Roles = new List<RoleModel> { dbRole.Result.Model }
             };
 
             // act

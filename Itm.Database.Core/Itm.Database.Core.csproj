@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Entities\AppUser.cs" />
     <Compile Include="Entities\AuditableBaseEntity.cs" />
+    <Compile Include="Entities\INonRemovableEntity.cs" />
     <Compile Include="Services\IDatabaseConnection.cs" />
     <Compile Include="Entities\IAppUser.cs" />
     <Compile Include="Exception\DatabaseException.cs" />

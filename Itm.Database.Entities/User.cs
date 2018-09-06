@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Itm.Database.Core.Entities;
 
 namespace Itm.Database.Entities
@@ -25,5 +26,6 @@ namespace Itm.Database.Entities
 		//Foreign Key
 		public virtual UserCredential UserCredential { get; set; }
 
+		public virtual ICollection<JUserRole> UserRole { get; set; }
 	}
 }

@@ -1,4 +1,4 @@
-﻿using Itm.DataValidation;
+﻿using System.Collections.Generic;
 
 namespace Itm.Models
 {
@@ -19,5 +19,7 @@ namespace Itm.Models
 		public string UserName { get; set; }
 
 		public string Password { get; set; }
+
+		public ICollection<RoleModel> Roles { get; set; }
 	}
 }
