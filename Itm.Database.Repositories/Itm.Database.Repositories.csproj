@@ -108,11 +108,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseRepository.cs" />
+    <Compile Include="IJUserRoleRoleRepository.cs" />
     <Compile Include="IRoleRepository.cs" />
     <Compile Include="IUserCredentialRepository.cs" />
     <Compile Include="IUserRepository.cs" />
+    <Compile Include="JUserRoleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BaseRepository.cs" />
+    <Compile Include="BaseAuditRepository.cs" />
     <Compile Include="Extensions\RepositoryExtension.cs" />
     <Compile Include="RoleRepository.cs" />
     <Compile Include="UserCredentialRepository.cs" />

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Itm.Database.Repositories
 {
-	public class RoleRepository : BaseRepository, IRoleRepository
+	public class RoleRepository : BaseAuditRepository, IRoleRepository
 	{
 		public RoleRepository (IAppUser userInfo, DbContext dbContext) : base (userInfo, dbContext)
 		{

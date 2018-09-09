@@ -1,6 +1,8 @@
-﻿namespace Itm.Database.Entities
+﻿using Itm.Database.Core.Entities;
+
+namespace Itm.Database.Entities
 {
-	public class JUserRole
+	public class JUserRole : IEntity
 	{
 		public int UserId { get; set; }
 		public User User { get; set; }

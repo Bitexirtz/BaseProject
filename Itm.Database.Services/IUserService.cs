@@ -1,22 +1,25 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Itm.Database.Core.Services;
 using Itm.Database.Core.Services.ResponseTypes;
 using Itm.Models;
 
 namespace Itm.Database.Services
 {
-	public interface IUserService : IService
-	{
-		Task<IListResponse<UserModel>> GetUsersAsync (int pageSize = 0, int pageNumber = 0);
-		Task<IListResponse<UserModel>> GetUsersWithCredentialsAsync (int pageSize = 0, int pageNumber = 0);
+    public interface IUserService : IService
+    {
+        Task<IListResponse<UserModel>> GetUsersAsync(int pageSize = 0, int pageNumber = 0);
+        Task<IListResponse<UserModel>> GetUsersWithDetailsAsync(int pageSize = 0, int pageNumber = 0);
 
-		Task<ISingleResponse<UserModel>> GetUserByIDAsync (int userID);
-		Task<ISingleResponse<UserModel>> GetUserByIDWithCredentialsAsync (int userID);
+        Task<ISingleResponse<UserModel>> GetUserByIDAsync(int userID);
+        Task<ISingleResponse<UserModel>> GetUserByIDWithDetailsAsync(int userID);
 
-		Task<ISingleResponse<UserModel>> UpdateUserAsync (UserModel updates);
+        Task<ISingleResponse<UserModel>> UpdateUserAsync(UserModel updates);
 
-		Task<ISingleResponse<UserModel>> AddUserAsync (UserModel details);
+        Task<ISingleResponse<UserModel>> AddUserAsync(UserModel details);
 
-		Task<ISingleResponse<UserModel>> RemoveUserAsync(int userID);
-	}
+        Task<ISingleResponse<UserModel>> AddUserRoleAsync(UserModel user, ICollection<RoleModel> roles);
+
+        Task<ISingleResponse<UserModel>> RemoveUserAsync(int userID);
+    }
 }

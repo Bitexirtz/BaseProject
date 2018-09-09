@@ -16,26 +16,28 @@ namespace Itm.Database.Services.UnitTest
 {
     public class UserServiceTest
     {
-        [Fact]
-        //public async Task AddUserAsync_AddUser_Success()
-        public void AddUserAsync_AddUser_Success()
+        Mock<ILogger> _loggerMock;
+        IMapper _mapper;
+        AppDbContext _appDbContext;
+        AppUser _appUser;
+
+        public UserServiceTest()
         {
-            // arrange
             // ILogger
-            var loggerMock = new Mock<ILogger>();
-            loggerMock.Setup(_ => _.Info(It.IsAny<string>()))
+            _loggerMock = new Mock<ILogger>();
+            _loggerMock.Setup(_ => _.Info(It.IsAny<string>()))
                 .Callback((string message) => Trace.WriteLine(message));
 
             // IMapper
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new UserProfile());
-				cfg.AddProfile (new RoleProfile ());
-			});
-            var mapper = config.CreateMapper();
+                cfg.AddProfile(new RoleProfile());
+            });
+            _mapper = config.CreateMapper();
 
             // IAppUser
-            var appUser = new AppUser(1, "LoggedUser");
+            _appUser = new AppUser(1, "LoggedUser");
 
             //AppDbContext
             var options = new DbContextOptionsBuilder<AppDbContext>()
@@ -43,27 +45,53 @@ namespace Itm.Database.Services.UnitTest
                   .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning))
                   .Options;
 
-            var appDbContext = new AppDbContext(options);
+            _appDbContext = new AppDbContext(options);
+        }
 
-			IRoleService roleService = new RoleService (loggerMock.Object, mapper, appUser, appDbContext);
-			IUserService userService = new UserService(loggerMock.Object, mapper, appUser, appDbContext);
+        [Fact]
+        public void AddUserAsync_AddUserWithRole_RelationIsCreated ()
+        {
+            // arrange
+            IRoleService roleService = new RoleService(_loggerMock.Object, _mapper, _appUser, _appDbContext);
+            IUserService userService = new UserService(_loggerMock.Object, _mapper, _appUser, _appDbContext);
 
-			var newRole = new RoleModel
-			{
-				Name = "Role 1",
-				Description = "Role 1 Description"
-			};
+            var newRole = new RoleModel
+            {
+                Name = "Role 1",
+                Description = "Role 1 Description"
+            };
+
+            // act
+            var dbRole = roleService.AddRoleAsync(newRole);
+
+            var newUser = new UserModel
+            {
+                FirstName = "User With Role",
+                LastName = "Last Name",
+                UserName = "Username",
+                Password = "Password",
+            };
+
+            // act
+            var dbUser = userService.AddUserAsync(newUser);
+
+            // assert
+            Assert.Equal(newUser.FirstName, dbUser.Result.Model.FirstName);
+        }
+
+        [Fact]
+        public void AddUserAsync_AddUser_Success()
+        {
+            // arrange
+			IUserService userService = new UserService(_loggerMock.Object, _mapper, _appUser, _appDbContext);
 
 			// act
-			var dbRole = roleService.AddRoleAsync (newRole);
-
 			var newUser = new UserModel
             {
                 FirstName = "User-" + DateTime.Now.ToString(),
                 LastName = "Last Name",
                 UserName = "Username",
                 Password = "Password",
-				Roles = new List<RoleModel> { dbRole.Result.Model }
             };
 
             // act

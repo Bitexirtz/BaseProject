@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Itm.Database.Repositories
 {
-	public class UserRepository : BaseRepository, IUserRepository
+	public class UserRepository : BaseAuditRepository, IUserRepository
 	{
 		public UserRepository (IAppUser userInfo, AppDbContext dbContext)
 			: base (userInfo, dbContext)
@@ -19,13 +19,13 @@ namespace Itm.Database.Repositories
 		public async Task<User> GetByIDAsync (int userID)
 				=> await DbContext.Set<User> ().FirstOrDefaultAsync (item => item.ID == userID);
 
-		public async Task<User> GetByIDWithCredentialsAsync (int entityID)
+		public async Task<User> GetByIDWithDetailsAsync (int entityID)
 				=> await DbContext.Set<User> ().EagerWhere (x => x.UserCredential, m => m.ID == entityID).FirstOrDefaultAsync ();
 
 		public IQueryable<User> GetAll (int pageSize = 10, int pageNumber = 1)
 				=> DbContext.Paging<User> (pageSize, pageNumber);
 
-		public IQueryable<User> GetAllWithCredentials (int pageSize = 10, int pageNumber = 1)
+		public IQueryable<User> GetAllWithDetails (int pageSize = 10, int pageNumber = 1)
 				=> DbContext.Set<User> ().Paging (x => x.UserCredential);
 
 		#endregion "Read Method"

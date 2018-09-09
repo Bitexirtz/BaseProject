@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Itm.Database.Repositories
 {
-	public class UserCredentialRepository : BaseRepository, IUserCredentialRepository
+	public class UserCredentialRepository : BaseAuditRepository, IUserCredentialRepository
 	{
 		public UserCredentialRepository (IAppUser userInfo, DbContext dbContext) : base (userInfo, dbContext)
 		{

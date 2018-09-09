@@ -42,14 +42,14 @@ namespace Itm.Database.Services
 			return response;
 		}
 
-		public async Task<ISingleResponse<RoleModel>> GetRoleByIDAsync (int userID)
+		public async Task<ISingleResponse<RoleModel>> GetRoleByIDAsync (int roleID)
 		{
 			Logger.Info (CreateInvokedMethodLog (MethodBase.GetCurrentMethod ().ReflectedType.FullName));
 
 			var response = new SingleResponse<RoleModel> ();
 
 			try {
-				var userDetails = await _roleRepository.GetByIDAsync(userID);
+				var userDetails = await _roleRepository.GetByIDAsync(roleID);
 
 				response.Model = Mapper.Map<RoleModel> (userDetails);
 			}
@@ -59,7 +59,6 @@ namespace Itm.Database.Services
 
 			return response;
 		}
-
 
 		public async Task<ISingleResponse<RoleModel>> AddRoleAsync (RoleModel details)
 		{

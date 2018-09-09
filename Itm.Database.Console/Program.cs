@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -40,7 +41,8 @@ namespace Itm.Database.Console
 			container.RegisterType<IMapper, ObjectMapper> ();
 			container.RegisterType<IAppUser, AppUser>(new InjectionConstructor(1, "LoggedUser"));
 			container.RegisterType<IUserService, UserService>();
-			IAppUser user = container.Resolve<IAppUser>();
+            container.RegisterType<IRoleService, RoleService>();
+            IAppUser user = container.Resolve<IAppUser>();
 
             Trace.WriteLine("Trace Start");
 
@@ -52,32 +54,47 @@ namespace Itm.Database.Console
 
 		static async Task MainAsync(IUnityContainer container)
 		{
-			IUserService repo = container.Resolve<IUserService>();
+			IUserService userService = container.Resolve<IUserService>();
+            IRoleService roleService = container.Resolve<IRoleService>();
 
-			var newUser = new UserModel
-			{
-				FirstName = "User-" + DateTime.Now.ToString (),
-				LastName = "Last Name",
-				UserName = "Username",
-				Password = "Password"
-			};
+            var newRole = new RoleModel
+            {
+                Name = "Role 1",
+                Description = "Role 1 Description"
+            };
 
-			await repo.AddUserAsync (newUser);
+            var newDbRole = await roleService.AddRoleAsync(newRole);
 
-			var updateUser = repo.GetUserByIDWithCredentialsAsync (1);
-			if (updateUser.Result.Model != null && updateUser.Result.DidError == false) {
-				updateUser.Result.Model.LastName = "Update-1";
-				await repo.UpdateUserAsync (updateUser.Result.Model);
-			}
+            var newUser = new UserModel
+            {
+                FirstName = "User-" + DateTime.Now.ToString(),
+                LastName = "Last Name",
+                UserName = "Username",
+                Password = "Password",
+                Roles = new List<RoleModel> { newRole }
+            };
 
-			//var updateUser = repo.GetUsersByIDAsync (1);
-			//if (updateUser.Result.Model != null && updateUser.Result.DidError == false) {
-			//	updateUser.Result.Model.LastName = "Update-1";
-			//	await repo.UpdateUserAsync (updateUser.Result.Model);
-			//}
+            var newDbUser = await userService.AddUserAsync(newUser);
+            if(newDbRole.DidError == false && newDbUser.DidError == false)
+            {
+                await userService.AddUserRoleAsync(newDbUser.Model, new List<RoleModel> { newDbRole.Model });
+            }
 
-			//var list = repo.GetUsersAsync ().Result.Model.ToList ();
-			//System.Console.WriteLine (list.Count);
-		}
+            //var updateUser = repo.GetUserByIDWithDetailsAsync(1);
+            //if (updateUser.Result.Model != null && updateUser.Result.DidError == false)
+            //{
+            //    updateUser.Result.Model.LastName = "Update-1";
+            //    await repo.UpdateUserAsync(updateUser.Result.Model);
+            //}
+
+            //var updateUser = repo.GetUsersByIDAsync (1);
+            //if (updateUser.Result.Model != null && updateUser.Result.DidError == false) {
+            //	updateUser.Result.Model.LastName = "Update-1";
+            //	await repo.UpdateUserAsync (updateUser.Result.Model);
+            //}
+
+            //var list = repo.GetUsersAsync ().Result.Model.ToList ();
+            //System.Console.WriteLine (list.Count);
+        }
 	}
 }
