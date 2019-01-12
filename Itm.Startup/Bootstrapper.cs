@@ -67,7 +67,7 @@ namespace Itm.Startup
 			Container.RegisterType<ILogger, Logger>(new InjectionConstructor());
 			Container.RegisterType<IMapper, ObjectMapper> ();
 			Container.RegisterType<IAppUser, AppUser>(new InjectionConstructor(1, "LoggedUser"));
-			Container.RegisterType<IUserService, UserService>();
+			Container.RegisterType<IAccountService, AccountService> ();
 		}
 	}
 }

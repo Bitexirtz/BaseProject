@@ -2,46 +2,21 @@
 using System.Threading.Tasks;
 using Itm.Database.Core.Entities;
 using Itm.Database.Entities;
+using Itm.Database.Repository.Core;
 using Microsoft.EntityFrameworkCore;
 
 namespace Itm.Database.Repositories
 {
-	public class UserCredentialRepository : BaseAuditRepository, IUserCredentialRepository
+	public class UserCredentialRepository : AuditableRepository<UserCredential>, IUserCredentialRepository
 	{
 		public UserCredentialRepository (IAppUser userInfo, DbContext dbContext) : base (userInfo, dbContext)
 		{
 		}
 
 		#region "Read Method"
-
-		public async Task<UserCredential> GetByIDAsync (int userID)
-				=> await DbContext.Set<UserCredential> ().FirstOrDefaultAsync (item => item.ID == userID);
-
-		public IQueryable<UserCredential> GetAll (int pageSize = 10, int pageNumber = 1)
-				=> DbContext.Paging<UserCredential> (pageSize, pageNumber);
 		#endregion "Read Method"
 
 		#region "Write Method"
-		public async Task<int> AddAsync (UserCredential entity)
-		{
-			Add (entity);
-
-			return await CommitChangesAsync ();
-		}
-
-		public async Task<int> DeleteAsync (UserCredential entity)
-		{
-			Remove (entity);
-
-			return await CommitChangesAsync ();
-		}
-
-		public async Task<int> UpdateAsync (UserCredential changes)
-		{
-			Update (changes);
-
-			return await CommitChangesAsync ();
-		}
 		#endregion "Write Method"
 	}
 }

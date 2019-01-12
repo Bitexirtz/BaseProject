@@ -94,6 +94,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Itm.Database.Services.UnitTest", "Itm.Database.Services.UnitTest\Itm.Database.Services.UnitTest.csproj", "{D76024DF-5FC2-47D3-BEFD-165D2A78498D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Itm.Database.Repository.Core", "Itm.Database.Repository.Core\Itm.Database.Repository.Core.csproj", "{3E54C7AC-99D8-4751-A932-63480B32A115}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -184,6 +186,10 @@ Global
 		{D76024DF-5FC2-47D3-BEFD-165D2A78498D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D76024DF-5FC2-47D3-BEFD-165D2A78498D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D76024DF-5FC2-47D3-BEFD-165D2A78498D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E54C7AC-99D8-4751-A932-63480B32A115}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E54C7AC-99D8-4751-A932-63480B32A115}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E54C7AC-99D8-4751-A932-63480B32A115}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E54C7AC-99D8-4751-A932-63480B32A115}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -225,6 +231,7 @@ Global
 		{048FB41D-0043-4EA3-814B-682951586D2A} = {9CA6CD6B-5165-4D6B-BEF7-76D647A2B866}
 		{9CA6CD6B-5165-4D6B-BEF7-76D647A2B866} = {DDAC8032-B26E-4AC4-9752-62AF89A17705}
 		{D76024DF-5FC2-47D3-BEFD-165D2A78498D} = {77A0D6B3-C6E6-4192-A10F-E64EDDD768EF}
+		{3E54C7AC-99D8-4751-A932-63480B32A115} = {6908E2DD-E598-4FE7-BF37-CA59C4289ADC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {25AEFC68-F93A-40CA-BBD1-34917DC59905}

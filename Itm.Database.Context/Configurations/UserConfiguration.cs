@@ -6,11 +6,11 @@ namespace Itm.Database.Context.Configurations
 {
 	public class UserConfiguration : EntityMappingConfiguration<User>
 	{
-		public override void Map (EntityTypeBuilder<User> builder)
+		public override void Map(EntityTypeBuilder<User> builder)
 		{
-			builder.Property (t => t.ID).ValueGeneratedOnAdd ();
-			builder.HasKey (t => t.ID);
-			builder.HasIndex (t => t.ID);
+			builder.Property(t => t.ID).ValueGeneratedOnAdd();
+			builder.HasKey(t => t.ID);
+			builder.HasIndex(t => t.ID);
 
 			// Set concurrency token for entity
 			builder.Property(t => t.Timestamp)

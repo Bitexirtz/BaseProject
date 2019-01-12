@@ -1,16 +1,13 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Itm.Database.Core.Entities;
+﻿using Itm.Database.Core.Entities;
 using Itm.Database.Entities;
 using Itm.Database.Repository.Core;
 using Microsoft.EntityFrameworkCore;
 
 namespace Itm.Database.Repositories
 {
-
-    public class JUserRoleRepository : Repository<JUserRole>, IJUserRoleRepository
-    {
-        public JUserRoleRepository(IAppUser userInfo, DbContext dbContext) : base(userInfo, dbContext)
+    public class JRoleResourceRepository : Repository<JRoleResource>, IJRoleResourceRepository
+	{
+        public JRoleResourceRepository (IAppUser userInfo, DbContext dbContext) : base (userInfo, dbContext)
         {
 
         }

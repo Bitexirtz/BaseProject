@@ -2,39 +2,43 @@
 using Itm.Database.Context;
 using Itm.Database.Core.Entities;
 using Itm.Database.Core.Services;
+using Itm.Database.Repositories;
 using Itm.Log.Core;
 
 namespace Itm.Database.Services
 {
-	public abstract class BaseService : IService
-	{
-		protected ILogger Logger;
-		protected IMapper Mapper;
-		protected IAppUser UserInfo;
-		protected bool Disposed;
-		protected readonly AppDbContext DbContext;
+    public abstract class BaseService : IService
+    {
+        protected bool Disposed;
 
-		public BaseService(ILogger logger, IMapper mapper, IAppUser userInfo, AppDbContext dbContext)
-		{
-			Logger = logger;
-			Mapper = mapper;
-			UserInfo = userInfo;
-			DbContext = dbContext;
-		}
+        protected AppDbContext DbContext { get; }
 
-		public void Dispose()
-		{
-			if (!Disposed)
-			{
-				DbContext?.Dispose();
+        protected ILogger Logger { get; }
 
-				Disposed = true;
-			}
-		}
+        protected IMapper Mapper { get; }
 
-		protected string CreateInvokedMethodLog(string methodName)
-		{
-			return string.Format("{0} has been invoked", methodName);
-		}
-	}
+        protected IAppUser UserInfo { get; }
+
+        public BaseService (ILogger logger, IMapper mapper, IAppUser userInfo, AppDbContext dbContext)
+        {
+            Logger = logger;
+            Mapper = mapper;
+            UserInfo = userInfo;
+            DbContext = dbContext;
+        }
+
+        public void Dispose ()
+        {
+            if (!Disposed) {
+                DbContext?.Dispose ();
+
+                Disposed = true;
+            }
+        }
+
+        protected string CreateInvokedMethodLog (string methodName)
+        {
+            return string.Format ("{0} has been invoked", methodName);
+        }
+    }
 }

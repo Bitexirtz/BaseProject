@@ -119,6 +119,7 @@
     <Compile Include="Configurations\EntityMappingConfiguration.cs" />
     <Compile Include="Configurations\EventLogConfiguration.cs" />
     <Compile Include="Configurations\IEntityMappingConfiguration.cs" />
+    <Compile Include="Configurations\JRoleResourceConfiguration.cs" />
     <Compile Include="Configurations\JUserRoleConfiguration.cs" />
     <Compile Include="Configurations\UserConfiguration.cs" />
     <Compile Include="AppDbContext.cs" />

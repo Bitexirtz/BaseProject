@@ -147,8 +147,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RoleServiceTest.cs" />
-    <Compile Include="UserServiceTest.cs" />
+    <Compile Include="AccountServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

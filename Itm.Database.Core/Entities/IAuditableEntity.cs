@@ -4,6 +4,7 @@ namespace Itm.Database.Core.Entities
 {
     public interface IAuditableEntity : IEntity
     {
+        int ID { get; set; }
         string CreationUser { get; set; }
         DateTime? CreationDateTime { get; set; }
         string CreationIPv4 { get; set; }

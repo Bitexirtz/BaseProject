@@ -10,6 +10,7 @@ using Itm.Database.Core.Exception;
 using Itm.Database.Core.Services.ResponseTypes;
 using Itm.Database.Entities;
 using Itm.Database.Repositories;
+using Itm.Database.Repository.Core;
 using Itm.Database.Services.Extensions;
 using Itm.Log.Core;
 using Itm.Models;
@@ -17,16 +18,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Itm.Database.Services
 {
-    public class UserService : BaseService, IUserService
+    internal class UserService : BaseService, IUserService
     {
-        protected IUserRepository _userRepository;
-        protected IUserCredentialRepository _userCredentialRepository;
+        private IUserRepository _userRepository { get; }
+        private IUserCredentialRepository _userCredentialRepository { get; }
+        private IJUserRoleRepository _userRoleRepository { get; }
 
         public UserService(ILogger logger, IMapper mapper, IAppUser userInfo, AppDbContext dbContext)
             : base(logger, mapper, userInfo, dbContext)
         {
-            _userCredentialRepository = new UserCredentialRepository(UserInfo, this.DbContext);
-            _userRepository = new UserRepository(UserInfo, this.DbContext);
+            _userRepository = new UserRepository (userInfo, DbContext);
+            _userCredentialRepository = new UserCredentialRepository (userInfo, DbContext);
+            _userRoleRepository = new JUserRoleRepository (userInfo, DbContext);
         }
 
         public async Task<IListResponse<UserModel>> GetUsersAsync(int pageSize = 0, int pageNumber = 0)
@@ -60,6 +63,24 @@ namespace Itm.Database.Services
             catch (Exception ex)
             {
                 response.SetError(ex, Logger);
+            }
+
+            return response;
+        }
+
+        public async Task<ISingleResponse<UserModel>> GetFirstOrDefaultAsync (int userID)
+        {
+            Logger.Info (CreateInvokedMethodLog (MethodBase.GetCurrentMethod ().ReflectedType.FullName));
+
+            var response = new SingleResponse<UserModel> ();
+
+            try {
+                var userDetails = await _userRepository.GetFirstOrDefaultAsync (userID);
+
+                response.Model = Mapper.Map<UserModel> (userDetails);
+            }
+            catch (Exception ex) {
+                response.SetError (ex, Logger);
             }
 
             return response;
@@ -105,6 +126,24 @@ namespace Itm.Database.Services
             return response;
         }
 
+        public async Task<IListResponse<UserModel>> GetAllDetailsWithRoleAsync(int userID)
+        {
+            Logger.Info(CreateInvokedMethodLog(MethodBase.GetCurrentMethod().ReflectedType.FullName));
+
+            var response = new ListResponse<UserModel>();
+
+            try
+            {
+                response.Model = await _userRepository.GetAllDetailsWithRole(userID).Select(o => Mapper.Map<UserModel>(o)).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                response.SetError(ex, Logger);
+            }
+
+            return response;
+        }
+
         public async Task<ISingleResponse<UserModel>> AddUserAsync(UserModel details)
         {
             Logger.Info(CreateInvokedMethodLog(MethodBase.GetCurrentMethod().ReflectedType.FullName));
@@ -135,29 +174,61 @@ namespace Itm.Database.Services
             return response;
         }
 
-        public async Task<ISingleResponse<UserModel>> AddUserRoleAsync(UserModel user, ICollection<RoleModel> roles)
+        public async Task<ISingleResponse<UserModel>> AddUserRolesAsync(UserModel user, ICollection<RoleModel> roles)
         {
             Logger.Info(CreateInvokedMethodLog(MethodBase.GetCurrentMethod().ReflectedType.FullName));
 
-            var userRoleRepository = new JUserRoleRepository(UserInfo, this.DbContext);
             var response = new SingleResponse<UserModel>();
 
             using (var transaction = DbContext.Database.BeginTransaction())
             {
                 try
                 {
-                    var userInfo = Mapper.Map<User>(user);
-                    var userRoles = new List<JUserRole>();
+
                     foreach (var role in roles)
                     {
-                        await userRoleRepository.AddAsync(new JUserRole {
+                        await _userRoleRepository.AddAsync(new JUserRole
+                        {
                             UserId = user.ID,
                             RoleId = role.ID
                         });
                     }
 
                     transaction.Commit();
-                    response.Model = Mapper.Map<UserModel>(user);
+
+                    var userResponse = await DbContext.Set<User>().EagerWhere(x => x.UserRoles, m => m.ID == user.ID).FirstOrDefaultAsync();
+
+                    response.Model = Mapper.Map<UserModel>(userResponse);
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    response.SetError(ex, Logger);
+                }
+            }
+
+            return response;
+        }
+
+        public async Task<ISingleResponse<UserModel>> AddUserRoleAsync(int userID, int roleID)
+        {
+            Logger.Info(CreateInvokedMethodLog(MethodBase.GetCurrentMethod().ReflectedType.FullName));
+            var response = new SingleResponse<UserModel>();
+
+            using (var transaction = DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    await _userRoleRepository.AddAsync(new JUserRole
+                    {
+                        UserId = userID,
+                        RoleId = roleID
+                    });
+
+                    transaction.Commit();
+                    var userResponse = await DbContext.Set<User>().EagerWhere(x => x.UserRoles, m => m.ID == userID).FirstOrDefaultAsync();
+
+                    response.Model = Mapper.Map<UserModel>(userResponse);
                 }
                 catch (Exception ex)
                 {
@@ -221,8 +292,6 @@ namespace Itm.Database.Services
                 {
                     throw new DatabaseException("User record not found.");
                 }
-
-                //await UserCredentialRepository.DeleteAsync(user.UserCredential);
 
                 await _userRepository.DeleteAsync(user);
                 response.Model = Mapper.Map<UserModel>(user);

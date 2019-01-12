@@ -42,7 +42,9 @@
   <ItemGroup>
     <Compile Include="ChangeLog.cs" />
     <Compile Include="ChangeLogExclusion.cs" />
+    <Compile Include="JRoleResource.cs" />
     <Compile Include="JUserRole.cs" />
+    <Compile Include="Resource.cs" />
     <Compile Include="UserCredential.cs" />
     <Compile Include="EventLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

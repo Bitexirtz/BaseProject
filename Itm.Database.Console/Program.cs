@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Itm.Database.Context;
 using Itm.Database.Core.Entities;
-using Itm.Database.Core.Services;
 using Itm.Database.Services;
 using Itm.Log;
 using Itm.Log.Core;
@@ -15,86 +12,122 @@ using Itm.ObjectMap;
 using Microsoft.EntityFrameworkCore;
 using Unity;
 using Unity.Injection;
+using Unity.Lifetime;
+using AutoMapper;
 
 namespace Itm.Database.Console
 {
-	class Program
-	{
-		static void Main(string[] args)
-		{
-			IUnityContainer container = new UnityContainer();
-			//Logger _logger = new Logger ("Internal.log");
+    internal class Program
+    {
+        private static void Main (string[] args)
+        {
+            IUnityContainer container = new UnityContainer ();
 
-			var dbConnection = ConfigurationManager.ConnectionStrings["AppDbConnection"].ConnectionString;
-			container.RegisterType<IDatabaseConnection, DefaultDatabaseConnection>(new InjectionConstructor(dbConnection));
+            #region SQL Server
+            //var dbConnection = ConfigurationManager.ConnectionStrings["AppDbConnection"].ConnectionString;
+            //container.RegisterType<IDatabaseConnection, DefaultDatabaseConnection>(new InjectionConstructor(dbConnection));
+            //var options = new DbContextOptionsBuilder<AppDbContext>()
+            //.UseSqlServer(dbConnection)
+            //.Options;
+            #endregion SQL Server
 
-			#region SQL Server
-			//var options = new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(dbConnection).Options;
-			#endregion SQL Server
+            #region SQLite
+            var options = new DbContextOptionsBuilder<AppDbContext> ()
+                .UseSqlite ("Data Source=Itm.db3;").Options;
+            #endregion SQLite
 
-			#region SQLite
-			var options = new DbContextOptionsBuilder<AppDbContext>().UseSqlite("Data Source=AppData.db3;").Options;
-			#endregion SQLite
+            //container.RegisterType<ILogger>(new InjectionFactory(l => LogManager.GetCurrentClassLogger()));
+            //container.RegisterType<ILogger>(LogHelper.GetLogger<NLog>(LogManager.GetCurrentClassLogger()));
+            container.RegisterType<AppDbContext> (new TransientLifetimeManager (), new InjectionConstructor (options));
 
-			container.RegisterType<ILogger, Logger> (new InjectionConstructor ());
-			container.RegisterType<AppDbContext>(new InjectionConstructor(options));
-			container.RegisterType<IMapper, ObjectMapper> ();
-			container.RegisterType<IAppUser, AppUser>(new InjectionConstructor(1, "LoggedUser"));
-			container.RegisterType<IUserService, UserService>();
-            container.RegisterType<IRoleService, RoleService>();
-            IAppUser user = container.Resolve<IAppUser>();
+            container.RegisterType<IMapper, ObjectMapper> ();
 
-            Trace.WriteLine("Trace Start");
+            container.RegisterType<IAppUser, AppUser> (new InjectionConstructor (1, "LoggedUser"));
+            container.RegisterType<ILogger, Logger> (new InjectionConstructor ());
+            container.RegisterType<IAccountService, AccountService> ();
 
-            Trace.Flush();
-            MainAsync(container).Wait();
+            CreateAccount (container).Wait ();
 
-            System.Console.Write("--Finished--");
-		}
-
-		static async Task MainAsync(IUnityContainer container)
-		{
-			IUserService userService = container.Resolve<IUserService>();
-            IRoleService roleService = container.Resolve<IRoleService>();
-
-            var newRole = new RoleModel
-            {
-                Name = "Role 1",
-                Description = "Role 1 Description"
-            };
-
-            var newDbRole = await roleService.AddRoleAsync(newRole);
-
-            var newUser = new UserModel
-            {
-                FirstName = "User-" + DateTime.Now.ToString(),
-                LastName = "Last Name",
-                UserName = "Username",
-                Password = "Password",
-                Roles = new List<RoleModel> { newRole }
-            };
-
-            var newDbUser = await userService.AddUserAsync(newUser);
-            if(newDbRole.DidError == false && newDbUser.DidError == false)
-            {
-                await userService.AddUserRoleAsync(newDbUser.Model, new List<RoleModel> { newDbRole.Model });
-            }
-
-            //var updateUser = repo.GetUserByIDWithDetailsAsync(1);
-            //if (updateUser.Result.Model != null && updateUser.Result.DidError == false)
-            //{
-            //    updateUser.Result.Model.LastName = "Update-1";
-            //    await repo.UpdateUserAsync(updateUser.Result.Model);
-            //}
-
-            //var updateUser = repo.GetUsersByIDAsync (1);
-            //if (updateUser.Result.Model != null && updateUser.Result.DidError == false) {
-            //	updateUser.Result.Model.LastName = "Update-1";
-            //	await repo.UpdateUserAsync (updateUser.Result.Model);
-            //}
-
-            //var list = repo.GetUsersAsync ().Result.Model.ToList ();
-            //System.Console.WriteLine (list.Count);
         }
-	}
+
+        private static UserModel CreateUser(string first, string middle, string last)
+        {
+            return new UserModel
+            {
+                FirstName = first,
+                MiddleName = middle,
+                LastName = last,
+                UserName = $"{first}-username",
+                Password = $"{first}-password"
+            };
+        }
+
+        private static RoleModel CreateRole(string roleName, bool allow = true)
+        {
+            return new RoleModel
+            {
+                Name = roleName,
+                Description = $"{roleName}-description",
+                Allow = allow
+            };
+        }
+
+        private static ResourceModel CreateResource(string resourceName)
+        {
+            return new ResourceModel {
+                Name = resourceName,
+                Description = $"{resourceName}-description"
+            };
+        }
+
+        private static async Task CreateAccount (IUnityContainer container)
+        {
+            IAccountService accountService = container.Resolve<IAccountService> ();
+
+            // About this test
+            // 1. Create User
+            // 2. Create Roles
+            // 3. Create Resources
+            // 4. Create Role <-> Resources
+            // 5. Create User <-> Role
+
+            #region "User"
+            // 1. Create User
+            var newUser = await accountService.AddUserAsync (CreateUser ("user1", "user1", "user1"));
+            #endregion "User"
+
+            #region "Role"
+            // 2. Create Roles
+            var role1 = await accountService.AddRoleAsync (CreateRole ("role1"));
+            var role2 = await accountService.AddRoleAsync (CreateRole ("role2"));
+            var role3 = await accountService.AddRoleAsync (CreateRole ("role3"));
+            #endregion "Role"
+
+            #region "Resource"
+            // 3. Create Resources
+            var resource1 = await accountService.AddResourceAsync (CreateResource ("resource1"));
+            var resource2 = await accountService.AddResourceAsync (CreateResource ("resource2"));
+            var resource3 = await accountService.AddResourceAsync (CreateResource ("resource3"));
+            var resource4 = await accountService.AddResourceAsync (CreateResource ("resource4"));
+            #endregion "Resource"
+
+            #region "Role Resource"
+            // 4. Create Role <-> Resource
+            await accountService.AddRoleResourceAsync (role1.Model.ID, resource1.Model.ID);
+            await accountService.AddRoleResourceAsync (role1.Model.ID, resource2.Model.ID);
+            await accountService.AddRoleResourceAsync (role1.Model.ID, resource3.Model.ID);
+            await accountService.AddRoleResourceAsync (role2.Model.ID, resource1.Model.ID);
+            await accountService.AddRoleResourceAsync (role2.Model.ID, resource4.Model.ID);
+            await accountService.AddRoleResourceAsync (role3.Model.ID, resource1.Model.ID);
+            #endregion "Role Resource"
+
+            #region "User <-> Role"
+            // 5. Create User <-> Role
+            await accountService.AddUserRoleAsync (newUser.Model.ID, role3.Model.ID);
+            #endregion "User <-> Role"
+
+            // Get user
+            var response = await accountService.GetFirstOrDefaultAsync (1);
+        }
+    }
 }

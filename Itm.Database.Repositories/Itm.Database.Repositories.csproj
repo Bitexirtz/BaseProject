@@ -108,15 +108,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseRepository.cs" />
+    <Compile Include="IJRoleResourceRepository.cs" />
+    <Compile Include="IJUserRoleRepository.cs" />
     <Compile Include="IJUserRoleRoleRepository.cs" />
+    <Compile Include="IResourceRepository.cs" />
     <Compile Include="IRoleRepository.cs" />
     <Compile Include="IUserCredentialRepository.cs" />
     <Compile Include="IUserRepository.cs" />
+    <Compile Include="JRoleResourceRepository.cs" />
     <Compile Include="JUserRoleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BaseAuditRepository.cs" />
-    <Compile Include="Extensions\RepositoryExtension.cs" />
+    <Compile Include="ResourceRepository.cs" />
     <Compile Include="RoleRepository.cs" />
     <Compile Include="UserCredentialRepository.cs" />
     <Compile Include="UserRepository.cs" />
@@ -133,6 +135,10 @@
     <ProjectReference Include="..\Itm.Database.Context\Itm.Database.Context.csproj">
       <Project>{e68552bd-111f-4be6-9652-4c3959ddd104}</Project>
       <Name>Itm.Database.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Itm.Database.Repository.Core\Itm.Database.Repository.Core.csproj">
+      <Project>{3e54c7ac-99d8-4751-a932-63480b32a115}</Project>
+      <Name>Itm.Database.Repository.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

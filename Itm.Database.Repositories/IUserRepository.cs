@@ -11,9 +11,13 @@ namespace Itm.Database.Repositories
 
 		IQueryable<User> GetAllWithDetails (int pageSize = 10, int pageNumber = 1);
 
-		Task<User> GetByIDAsync (int userID);
+        Task<User> GetFirstOrDefaultAsync (int userID);
+
+        Task<User> GetByIDAsync (int userID);
 
 		Task<User> GetByIDWithDetailsAsync (int userID);
+
+		IQueryable<User> GetAllDetailsWithRole (int entityID);
 
 		Task<int> AddAsync (User entity);
 
